@@ -1,0 +1,13 @@
+;===================================================
+;						Loading Changes to CWI
+;===================================================
+
+	>> In a CWI window select the 'Object' menu from the main bar at the top of the page
+	>> Choose 'Modify Objects from Excel'
+	>> Browse for the file named 'rtaLoad.xlsx' in the My Documents folder on your computer
+	>> Click the 'Return' button to submit the dialogue
+	>> Finally, select the sheet name to load from (only 1 selection should be available)
+	
+	>> A window will open and being to load the data from the excel sheet...
+			DON'T CLOSE THIS WINDOW! When the load is complete, this window will automatically
+			close.

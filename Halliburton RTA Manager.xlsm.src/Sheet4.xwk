@@ -1,0 +1,44 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "Sheet4"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+'                                                              INTRO SHEET  ENTER  BUTTON
+
+'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+Private Sub CommandButton1_Click()
+    On Error Resume Next
+    
+    ' Check for push file
+    '================
+    If Dir("\\corp.halliburton.com\team\wd\Public\Rameen Bakhtiary\wdRTApush.exe") <> "" Then
+        Call ShellAndWait("""" & "\\corp.halliburton.com\team\wd\Public\Rameen Bakhtiary\wdRTApush.exe", 230000, vbNormalNoFocus, IgnoreBreak)
+    End If
+    
+    ' Check for the critical file:      CMDline_Functions.exe
+    ' If not found, prompt user to take action and exit.
+    '=========================================
+    If Dir(ThisWorkbook.Path & "\Include\CMDline_Functions.exe") = "" Then Call _
+        MsgBox("Uh oh... An important file couldn't be found:" & vbNewLine & vbNewLine & "                                 CMDline_Functions.exe" & vbNewLine & vbNewLine & _
+        "Without it, many features won't work. This file should be located in the same folder as this worksheet. " & vbNewLine & _
+        "If missing, run the WD RTA Manager installer file found in CWI software ref number 9290-5103).", vbCritical Or vbSystemModal, "--=[ WD RTA Sheet ]=--"): Application.Quit
+            
+            
+    ' Check for valid screen resolution & any updates using CMDline_Functions.exe checker
+    '================================
+    Call ShellAndWait("""" & ThisWorkbook.Path & "\Include\CMDline_Functions.exe"" /checkRes " & ActiveSheet.sheetRev.Caption, 180000, vbNormalNoFocus, IgnoreBreak)
+    If Application.Range("FullScreenMode") = True Then
+        Application.DisplayFullScreen = True
+    Else
+        Application.DisplayFullScreen = False
+    End If
+    Sheet1.Visible = xlSheetVisible
+    Sheet1.Activate
+    Sheet4.Visible = xlSheetHidden
+End Sub
