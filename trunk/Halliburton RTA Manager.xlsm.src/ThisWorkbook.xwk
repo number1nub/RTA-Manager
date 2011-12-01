@@ -7,19 +7,45 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
-
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-'                                                                                 Password protect the ability to save the file,
-'                                                                           and disable saving/promt to save changes on exitting
+'_______________________________________________________________________________________________________________
+'***************************************************************************************************************
 '
+'   File:   ThisWorkbook
+'
+'_______________________________________________________________________________________________________________
+'***************************************************************************************************************
 
-'-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+
+'____________________________________________________________________________________________________
+'====================================================================================================
+'   Sub: Workbook_BeforeClose
+'       Sets the saved state to true before exitting in order to disable the save changes
+'       prompt on exit
+'
+'   Group: About
+'       - *Written By:*   Rameen Bakhtiary
+'       - *Last Modified:   10/24/2011
+'====================================================================================================
 Private Sub Workbook_BeforeClose(Cancel As Boolean)
-    If ThisWorkbook.Path <> "C:\Dropbox\Public\WD RTA Manager sheet" Then ThisWorkbook.saved = True
+    If ThisWorkbook.Path <> "C:\Dropbox\SVN\Halliburton RTA Manager\trunk" Then ThisWorkbook.saved = True
 End Sub
 
+
+
+
+'____________________________________________________________________________________________________
+'====================================================================================================
+'   Sub: Workbook_BeforeSave
+'       Requires a password to save changes to the workbook
+'
+'   Group: About
+'       - *Written By:*   Rameen Bakhtiary
+'       - *Last Modified:   10/24/2011
+'====================================================================================================
 Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
-    If ThisWorkbook.Path <> "C:\Dropbox\Public\WD RTA Manager sheet" Then
+    If ThisWorkbook.Path <> "C:\Dropbox\SVN\Halliburton RTA Manager\trunk" Then
         Dim OKtoSave As Variant
         OKtoSave = GetPassWord("Save Changes...", "s4v3 it")
         If OKtoSave = False Then: Cancel = True: Exit Sub

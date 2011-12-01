@@ -55,9 +55,9 @@ Sub moveToXML()
     
     ' Header / File Name
     '==================
-    fname = Format(Now(), "m/d/yyyy") & " " & loname & " RTA Priorities List"
+    fName = Format(Now(), "m/d/yyyy") & " " & loname & " RTA Priorities List"
     fFullPath = ThisWorkbook.Path & "\Generated Reports\" & Format(Now(), "m-d-yyyy") & " " & loname & " Sustaining Priorities.pdf"
-    Range("a1") = fname
+    Range("a1") = fName
     
     ' Make sure that the Generated Reports folder exists; else create it
     '===================================================
