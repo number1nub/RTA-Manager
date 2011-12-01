@@ -12,10 +12,10 @@
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:7"/>
     <ROW Property="Manufacturer" Value="Halliburton" ValueLocId="*"/>
-    <ROW Property="ProductCode" Value="1033:{21DD7274-84F2-42D1-BCAF-B40DC6AF3AF1} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{9F7B9DC8-6BFF-48BD-957B-E05283023732} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Halliburton RTA Manager" ValueLocId="*"/>
-    <ROW Property="ProductVersion" Value="2.0.2"/>
+    <ROW Property="ProductVersion" Value="2.0.3.1"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{19151B34-818D-49A2-B327-CC65233BCBF8}"/>
