@@ -9,6 +9,8 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
 
 
+
+
 '____________________________________ LAB OFFICE BUTTONS ___________________________________________
 '%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%
 
@@ -47,6 +49,16 @@ Attribute VB_Exposed = True
         End Sub
             
 
+Private Sub returnToTop_Click()
+
+End Sub
+
+
+
+Private Sub sheetView_Click()
+
+End Sub
+
     '==================================================
     '      Software  Button
     '==================================================
@@ -65,6 +77,25 @@ Attribute VB_Exposed = True
 '____________________________________ SHEET TOOL BUTTONS ___________________________________________
 '%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%
 
+
+    '===================================================
+    '           FULL SCREEN MODE CHECKBOX
+    '===================================================
+    Sub fullScreenMode_Click()
+    
+        'Show a pop-up notification of current  full-screen mode
+        '==========================================================
+        If Application.Range("fullScreenMode") = False Then
+            fsMode = "ON"
+            Application.DisplayFullScreen = True
+            Application.Range("fullScreenMode") = True
+        Else
+            fsMode = "OFF"
+            Application.DisplayFullScreen = False
+            Application.Range("fullScreenMode") = False
+        End If
+        Call notify("", "Full-Screen mode: " & fsMode, 2)
+    End Sub
 
 
     '==================================================
@@ -196,7 +227,7 @@ Attribute VB_Exposed = True
                     vbSystemModal Or vbDefaultButton1, "RTA Management Sheet")
             If ans = vbNo Then Exit Sub
         End If
-        ActiveWorkbook.Connections("Formatted WD RTA Querey").Refresh
+        ActiveWorkbook.Connections("Formatted WD RTA Querey").refresh
         
         Call sortField(" ")
         Application.ScreenUpdating = True
@@ -234,12 +265,12 @@ Attribute VB_Exposed = True
         Cells.EntireColumn.Hidden = False
         Application.Goto ("depthide")
         Selection.EntireColumn.Hidden = True
-        clearSort.Caption = "Finish"
+        ClearSort.Caption = "Finish"
         Application.Range("sheetviewmode") = "Edit"
         gotoDept.Visible = False
         sheetView.Caption = "SHEET MODE: EDIT"
-        sheetView.BackColor = &HFFFF&      'Yellow back
-        sheetView.ForeColor = &HC0&         'Red text
+'        sheetView.BackColor = &HFFFF&      'Yellow back
+'        sheetView.ForeColor = &HC0&         'Red text
         
         
         If Application.Range("cfilt") <> "pm" Then
@@ -300,7 +331,7 @@ Attribute VB_Exposed = True
         If Application.Range("sheetviewmode") = "Edit" Then
             Application.Range("sheetviewmode") = "PMT"
             sheetView.Caption = "SHEET MODE: PMT"
-            sheetView.BackColor = &H404040  'Gray back
+            sheetView.BackColor = &H5558D5    'Red back
             sheetView.ForeColor = &HFFFFFF  'White text
             
             
@@ -336,7 +367,7 @@ Attribute VB_Exposed = True
             
             ' Show / Hide / Rename other buttons for PMT mode
             '==========================================
-            clearSort.Caption = "Reset"
+            ClearSort.Caption = "Reset"
             
             
             '=================================================
@@ -459,6 +490,26 @@ End Sub
 '
 
 '-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+'Click search button
+Private Sub searchButton_Click()
+    If Len(rtasearch) <> 6 Then MsgBox "Invalid RTA number.": rtasearch = "": End
+        i = 6
+        While Cells(i, 2) <> ""
+            If Cells(i, 2) = rtasearch Then
+                '--- Found, but currently hidden---
+                If Rows(i).EntireRow.Hidden Then MsgBox "The RTA you searched was found at row " & i & " but is not shown in this table and will not be selected.": rtasearch = "": End
+                '--- FOUND IT -----
+                Rows(i).Select: rtasearch = "":  End
+            End If
+            i = i + 1
+        Wend
+        '   --- Not found ---
+        MsgBox "Could not find RTA " & rtasearch & " in table."
+    
+End Sub
+
+'press enter
 Private Sub rtaSearch_KeyDown(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
     If KeyCode = 13 Then
         If Len(rtasearch) <> 6 Then MsgBox "Invalid RTA number.": rtasearch = "": End
