@@ -133,7 +133,7 @@ Sub prioritize_ReOrder()
     Application.Goto ("pmthide")
     Selection.EntireColumn.Hidden = True
     Sheet1.sheetView.Caption = "SHEET MODE: PMT"
-    Sheet1.clearSort.Caption = "Reset"
+    Sheet1.ClearSort.Caption = "Reset"
     Sheet1.PM.Visible = True
     Sheet1.fc.Visible = True
     Sheet1.di.Visible = True
