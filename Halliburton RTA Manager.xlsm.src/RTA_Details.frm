@@ -25,7 +25,7 @@ Public saved As Boolean
 Private Sub UserForm_Initialize()
     Dim crw As Integer
     crw = ActiveCell.Row
-    rtaNum.Caption = "RTA " & ActiveCell.Value
+    rtaNUm.Caption = "RTA " & ActiveCell.Value
     class = Cells(crw, getCol("Class"))
     desc = Cells(crw, getCol("Description"))
     comments = Cells(crw, getCol("Comments"))
@@ -122,7 +122,7 @@ Private Sub rtaNUm_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
     If Dir(progP) = "" Then Call MsgBox("Uh oh... An important file couldn't be found:  CMDline_Functions.exe" & vbCrLf & "" & vbCrLf & _
             "Without it, you cannot open RTAs directly in CWI. This file should be located" & Chr(10) & "in the Include folder within this worksheets directory. " & vbCrLf & vbCrLf & _
             "Running the installer file should solve this issue", vbCritical Or vbSystemModal, "--=[ WD RTA Sheet ]=--")
-        Call Shell("""" & progP & """ " & Right(rtaNum.Caption, 6), vbNormalFocus)
+        Call Shell("""" & progP & """ " & Right(rtaNUm.Caption, 6), vbNormalFocus)
         Exit Sub
 End Sub
 
@@ -172,7 +172,7 @@ Private Sub uploadToCWI_Click()
     
     ' Formatted RTA Number R00000XXXXXX
     '==================================
-    tmp = "R00000" & Strings.Right(rtaNum.Caption, 6)
+    tmp = "R00000" & Strings.Right(rtaNUm.Caption, 6)
     
     
     ' Find the first open cell on RTAimport sheet or find the same
