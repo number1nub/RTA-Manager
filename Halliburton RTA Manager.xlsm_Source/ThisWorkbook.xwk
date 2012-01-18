@@ -29,7 +29,7 @@ Attribute VB_Exposed = True
 '       - *Last Modified:   10/24/2011
 '====================================================================================================
 Private Sub Workbook_BeforeClose(Cancel As Boolean)
-    If ThisWorkbook.Path <> "C:\Dropbox\Halliburton RTA Manager" Then ThisWorkbook.saved = True
+    If myPath <> DEV_PATH Then ThisWorkbook.saved = True
 End Sub
 
 
@@ -45,7 +45,7 @@ End Sub
 '       - *Last Modified:   10/24/2011
 '====================================================================================================
 Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
-    If ThisWorkbook.Path <> "C:\Dropbox\Halliburton RTA Manager" Then
+    If myPath <> DEV_PATH Then
         Dim OKtoSave As Variant
         OKtoSave = GetPassword("Save Changes...", "s4v3 it")
         If OKtoSave = False Then: Cancel = True: Exit Sub

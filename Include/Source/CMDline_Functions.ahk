@@ -39,6 +39,37 @@ Icon_1=C:\Dropbox\Halliburton RTA Manager\Resource\Halliburton RTA Manager.ico
 ;       and it's corresponding function. This script performs no function if called without
 ;       arguments.
 ;
+;    CMD Line Switches:
+;
+;       /checkRes                   -   Checks the screen resolution of the monitor that contains an                               
+;                                       Excel window. If it's less than 1280 x 1024, prompts user to change
+;                                       and will open the Windows Display Properties Settings dialogue.
+;                                                 
+;		/run <p2> [p3]              -   Runs p2;  if given, p3 will be passed as a parameter
+;		            
+;		/popUp <p2> [p3] [p4] [p5]  -   Display a flashing tooltip-like notification at bottom of screen.
+;		                                p2 - Tool-tip main text
+;	                                    p3 - Tool-tip title. (Default: WD RTA Management Sheet)                                                                                        
+;	                                    p4 - Duration [seconds] to show popup. If p4 = "f" then popup
+;	                                         will flash until it is clicked.
+;	                                    p5 - If pop-up is clicked before timing out, this will be run
+;	
+;		/splash <p2>                -   Displays a splash image at the top of the screen with the specified text
+;		                                given in p2
+;            
+;		/Load [p2]                  -	Opens a CWI page and gives instruction on how to load changes 
+;		                                from an Excel sheet. If given - [p2] is copied to clipboard (to allow for
+;		                                a path to be quickly pasted into the CWI dialogue).
+;
+;		/test [p2] [p3] [p4] [p5]   -	For debugging & testing purposes. Displays pop-up notification very
+;		                                similar to /popup. See /popUp for parameter explainations (only
+;		                                difference is that default title is "CMDline_Functions Debugging...")
+;		                                                                
+;		<p1> [p2]                   -	If a parameter is passed that does not begin with one of the above, 
+;		                                it is assumed to be a CWI search; most commonly this is used to 
+;		                                open an RTA in CWI (by double-clicking the Excel GUI title).             
+;
+;---------------------------------------------------------------------------------------------------
 ;	Group: About
 ;		Script file & source code information
 ;
@@ -47,7 +78,14 @@ Icon_1=C:\Dropbox\Halliburton RTA Manager\Resource\Halliburton RTA Manager.ico
 ;---------------------------------------------------------------------------------------------------
  #NoEnv
  #SingleInstance, Off
- SetWorkingDir, %A_ScriptDir%
+ DetectHiddenWindows, on
+ DetectHiddenText, on
+ CoordMode, mouse, relative
+ Dir := Replace(RegRead("HKCU", "Software\Halliburton RTA Manager", "InstallDir"), """", "", "All")
+ if !(Dir)     ;Error with reg entry. Set working dir to parent dir of this script
+	Dir = %a_scriptdir%\..
+ SetWorkingDir, %Dir%
+ SetTitleMatchMode, 2
  SetKeyDelay, -1
  SetBatchLines, -1
 ;___________________________________________________________________________________________________
@@ -57,56 +95,6 @@ Icon_1=C:\Dropbox\Halliburton RTA Manager\Resource\Halliburton RTA Manager.ico
 
 
 
-    File:           CMDline_Functions
-        Functions, commands, macros & scriplets that are all accessed & run via
-        the CMD line by passing parameters.  This program performs no action if 
-        run/called with no parameters; it will simply exit.
-
-    Parameters:
-                /checkRes                   -   Checks the screen resolution of the monitor that contains an                               
-                                                Excel window. If it's less than 1280 x 1024, prompts user to change
-                                                and will open the Windows Display Properties Settings dialogue.
-                                                 
-                /run <p2> [p3]              -   Runs p2;  if given, p3 will be passed as a parameter
-                            
-                /popUp <p2> [p3] [p4] [p5]  -   Display a flashing tooltip-like notification at bottom of screen.
-                                                    p2 - Tool-tip main text
-                                                    p3 - Tool-tip title. (Default: WD RTA Management Sheet)                                                                                        
-                                                    p4 - Duration [seconds] to show popup. If p4 = "f" then popup
-                                                         will flash until it is clicked.
-                                                    p5 - If pop-up is clicked before timing out, this will be run
-                
-                /splash <p2>                -   Displays a splash image at the top of the screen with the specified text
-                                                given in p2
-            
-                /Load [p2]                  -	Opens a CWI page and gives instruction on how to load changes 
-                                                from an Excel sheet. If given - [p2] is copied to clipboard (to allow for
-                                                a path to be quickly pasted into the CWI dialogue).
-
-                /test [p2] [p3] [p4] [p5]   -	For debugging & testing purposes. Displays pop-up notification very
-                                                similar to /popup. See /popUp for parameter explainations (only
-                                                difference is that default title is "CMDline_Functions Debugging...")
-                                                                                
-                <p1> [p2]                   -	If a parameter is passed that does not begin with one of the above, 
-                                                it is assumed to be a CWI search; most commonly this is used to 
-                                                open an RTA in CWI (by double-clicking the Excel GUI title).             
-                                                
-*************************************************************************************************************************
-*/
-
-#SingleInstance, Off
-#NoEnv  
-DetectHiddenWindows, on
-DetectHiddenText, on
-CoordMode, mouse, relative
-Dir := Replace(RegRead("HKCU", "Software\Halliburton RTA Manager", "InstallDir"), """", "", "All")
-if !(Dir)     ;Error with reg entry. Set working dir to parent dir of this script
-	Dir = %a_scriptdir%\..
-SetWorkingDir % Dir
-SetTitleMatchMode, 2
-SendMode, Input
-
-  
   
 ;===================================================
 ;       Tray Icon from compiled resources
@@ -172,11 +160,7 @@ load:
         sleep, 150
     }   
     sleep, 880
-    winactivate, Advanced Lookup -
-    ;==== Promt user to open CWI menu =========
-    Clipboard=
-    Clipboard := A_MyDocuments "\rtaLoad.xlsx"
-    ;~ MsgBox, 262208, Load RTA info to CWI, Select 'Modify objects from excel' from the 'Object' menu in CWI.`n`n**The file path of the RTA Modifications file has been copied to your clipboard... just paste it!**
+    winactivate, Advanced Lookup -        
     sleep 50
     ;==== Quit ==============
 ExitApp

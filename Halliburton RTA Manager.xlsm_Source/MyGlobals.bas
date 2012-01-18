@@ -1,14 +1,11 @@
 Attribute VB_Name = "MyGlobals"
 ' ___________________________________________________________________________________________________
 ' ***************************************************************************************************
-' Module: GlobalVars
-'
+' Module: GlobalVarS
 '   This module contains global settings, constants and variables.
 '
-' About:
-'   o Last Modified: 2012-01-16
-' ___________________________________________________________________________________________________
 ' ***************************************************************************************************
+
 
 
 '===================================================================================================
@@ -31,33 +28,66 @@ Attribute VB_Name = "MyGlobals"
     '       LOCATION WHERE RTALOAD FILES ARE BACKED UP/SAVED ON EACH LOAD
     '
     Public Const BACKUP_DIR  As String = PUB_DIR & "RTALoad Archive\"
-    '________________________________________________________________________________
+    '______________________________________________________________
     '       DEVELOPER FOLDER PATH - If the workbook is in this path
     '       then workbook save restrictions are ignored
     '
     Public Const DEV_PATH As String = "C:\Dropbox\Halliburton RTA Manager"
-
-
-'===================================================================================================
-'                    R T A   S H E E T   H E L P E R   F I L E   P A T H S
-'===================================================================================================
-
     '________________________________
     '       PATH TO UPDATE CHECK FILE
     '
-    Public Const UPDATE_PATH As String = PUB_DIR & "RTA Sheet Update.exe"
-    
-    
-'===================================================================================================
-'                               O T H E R   C O N S T A N T S
-'===================================================================================================
+    Public Const UPDATE_PATH As String = WDPUB & "Rameen Bakhtiary\wdRTApush.exe"
 
     '____________________________________________________
     '       DEFAULT SHEET PASSWORD (USED FOR SWITCH MODE)
     '
     Public Const DEFAULT_PW As String = "wdr74!"
 
+    
+    '_________________________________
+    '       SHEET   GLOBAL   VARIABLES
+    '
+    Public myPath As String
+    Public MyDocs As String
+    Public WinUname As String
+    Public FullName As String
+        
+    
+    
+' ===================================================================================================
+' I N I T I AL I Z E   G L O B A L    S H E E T    V A R I A B L E S
+' ===================================================================================================
+
+Public Sub initializeGlobals()
 
 
-
-
+    '________________________
+    '       PATH TO THIS FILE
+    '
+    myPath = ThisWorkbook.Path
+    
+    '____________________________________________________________________
+    '       USER'S LOGON USERNAME & USER'S FULL FIRST/LAST NAME (IF FOUND)
+    '
+    WinUname = UserName
+    FullName = userFullName
+    
+    '__________________________
+    '       MY DOCUMENTS FOLDER
+    '
+    MyDocs = "C:\Documents and Settings\" & WinUname & "\My Documents\"
+End Sub
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
