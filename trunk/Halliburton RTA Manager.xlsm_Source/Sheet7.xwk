@@ -20,6 +20,11 @@ Attribute VB_Exposed = True
 Private Sub CommandButton1_Click()
     On Error Resume Next
     
+    
+    initializeGlobals
+    
+    
+    
        
     
     '===============================================================
@@ -30,12 +35,14 @@ Private Sub CommandButton1_Click()
     End If
 
 
+
+
         
     '=====================================================================
     '   ENSURE THAT CMDline_Functions.exe IS FOUND -- ELSE
     '   PROMPT TO FIX & QUIT
     '======================================================================
-        If Dir(ThisWorkbook.Path & "\Include\CMDline_Functions.exe") = "" Then
+        If Dir(myPath & "\Include\CMDline_Functions.exe") = "" Then
             Call MsgBox("Uh oh... An important file couldn't be found:" & vbNewLine & vbNewLine & _
             "                                 CMDline_Functions.exe" & vbNewLine & vbNewLine & _
             "Without it, this sheet cannot fully function. Please re-run the installer to fix this issue." _
