@@ -1,0 +1,53 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "ThisWorkbook"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+'_______________________________________________________________________________________________________________
+'***************************************************************************************************************
+'
+'   File:   ThisWorkbook
+'
+'_______________________________________________________________________________________________________________
+'***************************************************************************************************************
+
+
+
+
+'____________________________________________________________________________________________________
+'====================================================================================================
+'   Sub: Workbook_BeforeClose
+'       Sets the saved state to true before exitting in order to disable the save changes
+'       prompt on exit
+'
+'   Group: About
+'       - *Written By:*   Rameen Bakhtiary
+'       - *Last Modified:   10/24/2011
+'====================================================================================================
+Private Sub Workbook_BeforeClose(Cancel As Boolean)
+    If ThisWorkbook.Path <> "C:\Dropbox\Halliburton RTA Manager" Then ThisWorkbook.saved = True
+End Sub
+
+
+
+
+'____________________________________________________________________________________________________
+'====================================================================================================
+'   Sub: Workbook_BeforeSave
+'       Requires a password to save changes to the workbook
+'
+'   Group: About
+'       - *Written By:*   Rameen Bakhtiary
+'       - *Last Modified:   10/24/2011
+'====================================================================================================
+Private Sub Workbook_BeforeSave(ByVal SaveAsUI As Boolean, Cancel As Boolean)
+    If ThisWorkbook.Path <> "C:\Dropbox\Halliburton RTA Manager" Then
+        Dim OKtoSave As Variant
+        OKtoSave = GetPassword("Save Changes...", "s4v3 it")
+        If OKtoSave = False Then: Cancel = True: Exit Sub
+    End If
+End Sub
