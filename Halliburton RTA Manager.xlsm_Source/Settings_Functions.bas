@@ -37,29 +37,6 @@ Attribute VB_Name = "Settings_Functions"
 
 
 
-'____________________________________________________________________________________________________
-'====================================================================================================
-' Function:     UserNameWindows
-'
-' Written by:   Rameen Bakhtiary
-' Created on:   10/24/2011
-' Description:
-'               Returns the current user's Windows username
-'
-'====================================================================================================
-Private Declare Function getUserName Lib "advapi32.dll" Alias "GetUserNameA" (ByVal lpBuffer As String, nSize As Long) As Long
-
-Function UserNameWindows() As String
-    Dim lngLen As Long
-    Dim strBuffer As String
-    Const dhcMaxUserName = 255
-    strBuffer = Space(dhcMaxUserName)
-    lngLen = dhcMaxUserName
-    UserNameWindows = ""
-    If CBool(getUserName(strBuffer, lngLen)) Then UserNameWindows = Left$(strBuffer, lngLen - 1)
-End Function
-
-
 
 
 

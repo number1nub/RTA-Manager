@@ -136,9 +136,13 @@ Attribute VB_Exposed = True
 
         ' Check that RTA Sheet Tools.exe is found; else prompt and abort
         '=====================================================================
-        If Dir(ThisWorkbook.Path & "\Include\RTA Sheet Tools.exe") = "" Then Call _
-            MsgBox("The file ""RTA Sheet Tools.exe"" could not be found." & vbCrLf & "" & vbCrLf & _
-            "Re-running the setup/installer may help resolve this issue...", vbExclamation, "Missing File!"): Exit Sub
+        If Dir(myPath & "\Include\RTA Sheet Tools.exe") = "" Then
+            Call MsgBox("The file ""RTA Sheet Tools.exe"" could not be found." & vbCrLf & "" & vbCrLf & _
+                "Re-running the setup/installer may help resolve this issue...", vbExclamation, "Missing File!")
+            Exit Sub
+        End If
+        
+
 
         'Get comma seperated list of all column headers
         '================================================
@@ -152,6 +156,7 @@ Attribute VB_Exposed = True
                 headers = headers & "," & col
             End If
         Next
+        
 
         'Get comma separated list of currently visible columns
         '========================================================
@@ -168,10 +173,9 @@ Attribute VB_Exposed = True
         Application.ScreenUpdating = True
 
         ' Launch RTA Sheet Tools.exe
-        '=========================
+        '============================
         paramList = """" & headers & """" & " """ & viscols & """"
-'        MsgBox ("""" & ThisWorkbook.Path & "\Include\RTA Sheet Tools.exe " & paramList)
-        Call Shell("""" & ThisWorkbook.Path & "\Include\RTA Sheet Tools.exe"" " & paramList, vbNormalFocus)
+        Call Shell("""" & myPath & "\Include\RTA Sheet Tools.exe"" " & paramList, vbNormalFocus)
     End Sub
 
 
@@ -404,7 +408,7 @@ Attribute VB_Exposed = True
                 '==========================================
                 ChDir BACKUP_DIR
                 
-                fname = BACKUP_DIR & Format(Now(), "yyyy-m-d  hhmm ") & "(" & UserNameWindows & ")  " & UCase(laboff) & ".xlsx"
+                fname = BACKUP_DIR & Format(Now(), "yyyy-m-d  hhmm ") & "(" & WinUname & ")  " & UCase(laboff) & ".xlsx"
             
                 ActiveWorkbook.SaveAs Filename:=fname, FileFormat:=xlOpenXMLWorkbook
                 ActiveWorkbook.Close
@@ -431,31 +435,27 @@ Attribute VB_Exposed = True
                 
                 
                 
-            ' Handle loading file to CWI (run CMDline_Functions.exe /load)
-            '==============================================================
-                loaderpath = ThisWorkbook.Path & "\Include\CMDline_Functions.exe"
-                un = UserNameWindows        'Get Windows Username
-                loadFilePath = "C:\documents and settings\" & un & "\my documents\rtaLoad.xlsx"     'Path of rtaLoad.xlsx document
+                ' Handle loading file to CWI (run CMDline_Functions.exe /load)
+                '==============================================================
+                loadFilePath = MDOCS_Path & "rtaLoad.xlsx"
+                
                 
                 
                 ' Call load file helper function in CMDline_Functions.exe
                 ' (will open CWI and copy rtaLoad.xlsx full path to clipboard)
                 '=================================================================
-                If Dir(loaderpath) <> "" Then
-                    Call Shell("""" & ThisWorkbook.Path & _
-                        "\Include\CMDline_Functions.exe"" /Load " & """" & loadFilePath _
-                        & """", vbNormalFocus)
-                    'Display pop-up notification
-                    Call CMDline_Func(vbNewLine & "Load to CWI by selecting 'Modify Objects from Excel'" & _
-                    vbNewLine & "from the 'Objects' menu." & vbNewLine, " rtaLoad.xlsx was saved in" & _
-                    vbNewLine & " your My Documents folder...", "4.5")
-                Else
-                
-                
-                ' CMDline_Functions.exe not found... prompt user and finish
-                '=============================================================
+                If Dir(myPath & "\Include\CMDline_Functions.exe") = "" Then
+                            
+                    ' CMDline_Functions.exe not found... prompt user and finish
                     MsgBox ("A file named rtaload.xlsx has been saved into your My Documents folder." & vbNewLine & "Choose modify objects from excel in CWI and load this file." _
                         & vbNewLine & "NOTE: There is an automatic loader app that will do this for you which was not found on your machine.")
+                Else
+                    Call CMDline_Func("/load")
+                    
+                    'Display pop-up notification
+                    Call CMDline_Func("/popup", vbNewLine & "Load to CWI by selecting 'Modify Objects from Excel'" & _
+                        vbNewLine & "from the 'Objects' menu." & vbNewLine, " rtaLoad.xlsx was saved in" & _
+                        vbNewLine & " your My Documents folder...", "4.5")
                 End If
             End If
         End If

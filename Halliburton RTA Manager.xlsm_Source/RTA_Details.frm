@@ -252,7 +252,7 @@ End Sub
 ' ___________________________________________________________________________________________________
 ' ===================================================================================================
 Sub openCWIpage(Optional view As String = "rta")
-    progP = ThisWorkbook.Path & "\Include\CMDline_Functions.exe"
+    progP = myPath & "\Include\CMDline_Functions.exe"
     formattedRTAnum = Right(rtaNUm.Caption, 6)
     
     'Can't find CMDline_Functions
@@ -386,8 +386,7 @@ overwrite:
         rtasht.Select
         rtasht.Copy
         
-        ActiveWorkbook.SaveAs Filename:="C:\documents and settings\" & UserNameWindows & "\my documents\rtaLoad.xlsx", _
-            FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+        ActiveWorkbook.SaveAs Filename:=MyDocs & "rtaLoad.xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
         
         
         
