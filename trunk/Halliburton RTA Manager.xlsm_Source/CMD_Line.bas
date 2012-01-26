@@ -16,6 +16,9 @@ Attribute VB_Name = "CMD_Line"
 
 
 
+
+
+
 ' ___________________________________________________________________________________________________
 ' ===================================================================================================
 ' Sub: CMDline_Func
@@ -37,7 +40,7 @@ Attribute VB_Name = "CMD_Line"
 ' ===================================================================================================
   Function CMDline_Func(cmdSwitch As String, Optional param2 = "", Optional param3 As String = "", Optional param4 = "", Optional param5 = "") As Double
       paramList = cmdSwitch & " " & """" & param2 & """" & " " & """" & param3 & """" & " " & """" & param4 & """" & " " & """" & param5 & """"
-      CMDline_Func = Shell("""" & ThisWorkbook.Path & "\Include\CMDline_Functions.exe"" " & paramList, vbNormalFocus)
+      CMDline_Func = Shell("""" & myPath & "\Include\CMDline_Functions.exe"" " & paramList, vbNormalFocus)
   End Function
   
   

@@ -19,7 +19,7 @@ Attribute VB_Name = "MyGlobals"
     '_______________________
     '       WD PUBLIC FOLDER
     '
-    Public Const WDPUB As String = "\\corp.halliburton.com\team\WD\"
+    Public Const WDPUB As String = "\\corp.halliburton.com\team\WD\Public\"
     '___________________________________
     '       RTA SHEET MAIN PUBLIC FOLDER
     '

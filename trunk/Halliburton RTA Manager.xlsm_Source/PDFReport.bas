@@ -106,14 +106,14 @@ Attribute VB_Name = "PDFReport"
         '==================
         fname = Format(Now(), "m/d/yyyy") & " " & loname & _
             " RTA Priorities List"
-        fFullPath = ThisWorkbook.Path & "\Generated Reports\" & Format(Now(), _
+        fFullPath = myPath & "\Generated Reports\" & Format(Now(), _
             "m-d-yyyy") & " " & loname & " Sustaining Priorities.pdf"
         Range("a1") = fname
         
         ' Make sure that the Generated Reports folder exists; else create it
         '===================================================
-        If Dir(ThisWorkbook.Path & "\Generated Reports", vbDirectory) = "" Then _
-            MkDir (ThisWorkbook.Path & "\Generated Reports")
+        If Dir(myPath & "\Generated Reports", vbDirectory) = "" Then _
+            MkDir (myPath & "\Generated Reports")
         
         'Save to PDF
         '=============

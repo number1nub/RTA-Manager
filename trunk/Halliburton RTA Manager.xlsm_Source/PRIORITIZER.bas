@@ -126,8 +126,7 @@ Sub prioritize_ReOrder()
         '   CHANGE THE PRIORITY NUMBER UNLESS ALREADY CORRECT
         If Cells(rw, priorityCol) <> newnum Then
             curPriority = Cells(rw, priorityCol)
-            Cells(rw, commentcol) = Strings.Replace(Cells(rw, commentcol), _
-                curPriority & ":", newnum & ":")
+            Cells(rw, commentcol) = Strings.Replace(Cells(rw, commentcol), curPriority & ":", newnum & ":")
             
             '_________________________
             '   WRITE TO RTALOAD SHEET
@@ -269,9 +268,8 @@ Sub saveImportSheet()
     '______________________________
     '   SAVE IN MY DOCUMENTS FOLDER
     '
-    un = UserNameWindows
-    ChDir "C:\documents and settings\" & un & "\my documents\"
-    ActiveWorkbook.SaveAs Filename:="C:\documents and settings\" & un & "\my documents\rtaLoad.xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
+    ChDir MyDocs
+    ActiveWorkbook.SaveAs Filename:=MyDocs & "rtaLoad.xlsx", FileFormat:=xlOpenXMLWorkbook, CreateBackup:=False
     
     '________________________________________________
     '   CLOSE THE NEWLY CREATED RTALOAD.XLSX WORKBOOK
