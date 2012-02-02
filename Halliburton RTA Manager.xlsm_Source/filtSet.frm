@@ -40,10 +40,10 @@ Private Sub UserForm_Initialize()
     '
     Set tmprg = Application.Range(prefix & "type")
     i = 1
-    rtaType.Clear
+    rtatype.Clear
     For Each v In tmprg
         If v <> "" Then
-             rtaType.AddItem tmprg(i)
+             rtatype.AddItem tmprg(i)
             i = i + 1
         End If
     Next
@@ -134,8 +134,8 @@ Private Sub settingSubmit_Click()
     '       RTA TYPE
     '
     Dim fary2(1 To 10) As String
-        For i = 0 To rtaType.ListCount - 1
-            fary2(i + 1) = rtaType.List(i)
+        For i = 0 To rtatype.ListCount - 1
+            fary2(i + 1) = rtatype.List(i)
         Next i
     Application.Range(prefix & "type") = fary2
     
@@ -248,21 +248,21 @@ End Sub
 'RTA Type Add
             If rtatype1 = "" Or IsNull(rtatype1) Then Exit Sub
             
-            For i = 0 To rtaType.ListCount - 1
-                If rtaType.List(i) = rtatype1 Then
+            For i = 0 To rtatype.ListCount - 1
+                If rtatype.List(i) = rtatype1 Then
                     rtatype1.Selected(i) = False
                     Exit Sub
                 End If
             Next
-            rtaType.AddItem rtatype1
+            rtatype.AddItem rtatype1
             rtatype1 = ""
         End Sub
         Private Sub CommandButton2_Click()
 'RTA Type REMOVE
-            If rtaType = "" Or IsNull(rtaType) Then Exit Sub
+            If rtatype = "" Or IsNull(rtatype) Then Exit Sub
             
-            IND = rtaType.ListIndex
-            rtaType.RemoveItem (IND)
+            IND = rtatype.ListIndex
+            rtatype.RemoveItem (IND)
         End Sub
         
         
