@@ -30,7 +30,6 @@ Public saved As Boolean
 
 
 
-
 '____________________________________________________________________________________________________
 '====================================================================================================
 '   Sub: UserForm_Initialize
@@ -38,33 +37,19 @@ Public saved As Boolean
 '
 '====================================================================================================
 Private Sub UserForm_Initialize()
+    Dim crw As Integer
+    crw = ActiveCell.Row
+    rtaNUm.Caption = "RTA " & ActiveCell.value
+    class = Cells(crw, getCol("Class"))
+    desc = Cells(crw, getCol("Description"))
+    comments = Cells(crw, getCol("Comments"))
+    assignedTo = Cells(crw, getCol("Assigned To"))
+    Department = Cells(crw, getCol("Current Status"))
+    techrevdate = Cells(crw, getCol("Revised Due Date"))
+    lab = Cells(crw, getCol("Lab Office"))
+    rtaType = Cells(crw, getCol("Type"))
+    rtacode = Cells(crw, getCol("Code"))
     
-    '________________________________
-    '       SET THE PUBLIC RTA VALUES
-    '
-        getCurrent
-        
-        
-    '___________________________
-    '       FILL THE RTA INFO IN
-    '
-    rtaNum.Caption = "RTA " & thisRta
-    class = thisClass
-    desc = thisDescription
-    comments = thisComment
-    assignedTo = thisAssignedto
-    Department = thisDept
-    techrevdate = thisTRDD
-    lab = thisLabOffice
-    rtatype = thisType
-    rtacode = thisCode
-    requestor = thisRequestor
-    state = thisState
-
-
-    '________________________________
-    '       SET THE LAB OFFICE PREFIX
-    '
     Select Case lab
     Case "WD1"
         prefix = "fc"
@@ -79,25 +64,14 @@ Private Sub UserForm_Initialize()
     Case Else
         prefix = ""
     End Select
-    
-    '______________________________________________________________________________
-    '       FILL THE 'ASSIGNED TO' COMBOBOX WITH ALL NAMES FROM THE RTAS LAB OFFICE
-    '
+    '=== Fill the 'Assigned To' combobox with all names from the RTAs Lab Office
     On Error Resume Next
     tmpary = Application.Range("Name" & prefix)
     For Each v In tmpary
         assignedTo.AddItem (v)
     Next
     
-    '_____________________________________________
-    '       ENABLE EDITABLE CONTROLS BASED ON MODE
-    '
-    If Application.Range("sheetViewMode") = "EDIT" Then
-        assignedTo.Enabled = True
-        class.Enabled = True
-        techrevdate.Enabled = True
-        Department.Enabled = True
-    End If
+    If Application.Range("sheetViewMode") <> "PMT" Then pmtHide.Enabled = True
     
     saved = True
     desc.SelStart = 0
@@ -115,24 +89,35 @@ End Sub
 '===================================================================================================
 '   Sub: emailSubmitter_Click
 '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-'   Open a new email to the RTA requestor
+'   -
 '
+'   Parameters:
+'       -
+'
+'   Group: About
+'       - *Written by:* Rameen Bakhtiary
+'       - *Last modified:*  2012-01-12
 '===================================================================================================
 Private Sub emailSubmitter_Click()
     
-    Dim olApp As Object
-    Dim olMsg As Object
-
-    Set olApp = GetObject(, "Outlook.Application")
-    If olApp Is Nothing Then
-        Set olApp = CreateObject("Outlook.Application")
-    End If
-
-    Const olMailItem = 0
-    Set olMsg = olApp.CreateItem(olMailItem)
-    With olMsg
-        .To = Cells
-        
+    submitterName = Split(submitter, " ")
+    MsgBox submitterName1 & vbNewLine & submittername2
+    
+'    Dim olApp As Object
+'    Dim olMsg As Object
+'
+'    Set olApp = GetObject(, "Outlook.Application")
+'    If olApp Is Nothing Then
+'        Set olApp = CreateObject("Outlook.Application")
+'    End If
+'
+'    Const olMailItem = 0
+'    Set olMsg = olApp.CreateItem(olMailItem)
+'    With olMsg
+'        .To = {STRING:To}
+'        .Subject = {STRING:Subject}
+'        .Body = {STRING:Body}
+    '     .Attachments.Add AttachmentArray(j)
     
     'Decide what to do with the mailitem
     '    .Send
@@ -257,36 +242,22 @@ End Sub
 ' ___________________________________________________________________________________________________
 ' ===================================================================================================
 ' Sub: openCWIpage
-'   Uses the external file 'CMDline_Functions.exe' to open the current RTA in the specified CWI
-'   view.
+'
+'   -
 '
 ' Parameters:
-'   view    -
+'   -
 '
 ' Last Modified: 2012-01-14
 ' ___________________________________________________________________________________________________
 ' ===================================================================================================
 Sub openCWIpage(Optional view As String = "rta")
-    
-    '_____________________________________
-    '       ENSURE THAT GLOBALS ARE LOADED
-    '
-    If Not pubInit Then initGlobals
-    
-    
-    
-    'Check for CMDline_Functions
-    '===============================
     progP = myPath & "\Include\CMDline_Functions.exe"
-    formattedRTAnum = Right(rtaNum.Caption, 6)
+    formattedRTAnum = Right(rtaNUm.Caption, 6)
     
-    If Dir(progP) = "" Then
-        Call MsgBox("Uh oh... An important file couldn't be found:  CMDline_Functions.exe" & _
-            vbCrLf & "" & vbCrLf & "Without it, you cannot open RTAs directly in CWI. This file should be located" & _
-            Chr(10) & "in the Include folder within this worksheets directory. " & vbCrLf & vbCrLf & _
-            "Running the installer file should solve this issue", vbCritical Or vbSystemModal, "--=[ WD RTA Sheet ]=--")
-        Exit Sub
-    End If
+    'Can't find CMDline_Functions
+    '===============================
+    If Dir(progP) = "" Then Call MsgBox("Uh oh... An important file couldn't be found:  CMDline_Functions.exe" & vbCrLf & "" & vbCrLf & "Without it, you cannot open RTAs directly in CWI. This file should be located" & Chr(10) & "in the Include folder within this worksheets directory. " & vbCrLf & vbCrLf & "Running the installer file should solve this issue", vbCritical Or vbSystemModal, "--=[ WD RTA Sheet ]=--")
     
     
     'In edit mode... check for changes & save b4 closing GUI
@@ -345,7 +316,7 @@ Private Sub uploadToCWI_Click()
     
     ' Formatted RTA Number R00000XXXXXX
     '==================================
-    tmp = "R00000" & Strings.Right(rtaNum.Caption, 6)
+    tmp = "R00000" & Strings.Right(rtaNUm.Caption, 6)
     
     
     ' Find the first open cell on RTAimport sheet or find the same
@@ -484,30 +455,7 @@ Private Sub wmComment_Click()
     desc = desc & insertTxt
     desc.SelStart = 5000
     
-End Sub
-
-
-
-
-
-' ___________________________________________________________________________________________________
-' ===================================================================================================
-'   Sub: liasonComment_Click
-'
-' ___________________________________________________________________________________________________
-' ===================================================================================================
-Private Sub liasonComment_Click()
-
     
-    If Application.Range("sheetviewmode") = "PMT" Then Call MsgBox( _
-        "You must be in Edit mode to insert a comment!", _
-        vbExclamation Or vbSystemModal, "Insert Comments"): Exit Sub
-
-    
-
-    insertTxt = Chr(10) & Chr(10) & Format(Now(), "yyyy-MM-dd") & ", WM: "
-    desc = desc & insertTxt
-    desc.SelStart = 5000
 End Sub
 
 

@@ -2,7 +2,7 @@
  * * * Compile_AHK SETTINGS BEGIN * * *
 
 [AHK2EXE]
-Exe_File=\\corp.halliburton.com\team\WD\Public\RTA Manager\wdRTAupdate.exe
+Exe_File=\\corp.halliburton.com\team\WD\public\Rameen Bakhtiary\wdRTAupdate.exe
 Created_Date=1
 Execution_Level=2
 [VERSION]
@@ -10,7 +10,7 @@ Resource_Files=C:\Dropbox\Halliburton RTA Manager\Include\Source\RTA Sheet Updat
 Set_Version_Info=1
 Company_Name=WSNHapps
 File_Description=Checks for and, if required, deploys, updates for the Halliburton RTA Manager
-File_Version=1.0.0.5
+File_Version=1.0.0.3
 Inc_File_Version=1
 Internal_Name=RTA Sheet Update.exe
 Legal_Copyright=WSNHapps
@@ -25,11 +25,11 @@ Icon_1=%In_Dir%\RTA Sheet Update.ahk_1.ico
 */
 
 ; ===================================================================================================
-; TITLE: RTA Sheet Update
+; TITLE: 	RTA Sheet Update
 ; ---------------------------------------------------------------------------------------------------
-; 	Updater file for RTA Sheet. Should be placed in the 
-; 	WD Public\RTA Manageer folder, and update.ini should also
-; 	be in this location.
+; Updater file for RTA Sheet. Should be placed in the 
+; WD Public\RTA Manageer folder, and update.ini should also
+; be in this location.
 ; ---------------------------------------------------------------------------------------------------
 ; 
 ; ABOUT:
@@ -45,42 +45,43 @@ Icon_1=%In_Dir%\RTA Sheet Update.ahk_1.ico
 
 
 
-;=======================================================================
-;                  S C R I P T    S E T T I N G S        
-;_______________________________________________________________________
-;=======================================================================
-	;_________________________________________________
-	; 		FULL PATH TO UPDATE SETTINGS/INFO INI FILE
-	;
-		update_INI := A_ScriptDir "\update.ini"
 
-
-	;____________________________________________________________
-	;		REGEX MATCH STRING FOR RTA MANAGER EXCEL WINDOW TITLE
-	;
-	;			Currently matches successfully when tested with
-	;			all RTA sheet versions using Excel 2007 & 2010
-	;			with any settings
-	;
-		ExcelTitle_RegEx := "(.*(.*?(Excel).*?)?(RTA Manage(r|ment))(.*?(Excel).*?)?.*)"
-	 
-	 
-	;____________________________________________________________
-	; 		REGEX STRING TO MATCH THE BETA VERSION INSTALLER FILE
-	;		WITH THE FORMAT: HRTAM_<BUILD NUMBER>.MSI
-	;
-		BetaInstaller_Regex := "i)HRTAM_(?P<Version>\d\.\d\.\d(\.\d)?)\.msi"
+;=================================================================
+;				G L O B A L     S E T T I N G S
+;=================================================================
 	
+	;_________________________________
+	; 		Full Path To Ini File With
+	;		Update Settings And Info
+	;
+	 update_INI := "\\corp.Halliburton.com\team\WD\public\RTA Manager\update.ini"
+	;_________________________________
+
+	;________________________________________________________________
+	;		RegEx string to match title of RTA Managers Excel window
+	;		in (I think) any version/setup of MS Office & any sheet
+	;		version.
+	;
+	 ExcelTitle_RegEx := "(.*(.*?(Excel).*?)?(RTA Manage(r|ment))(.*?(Excel).*?)?.*)"
+	;________________________________________________________________
+
+	;____________________________________________________________
+	; 		Regex String To Match The Beta Version Installer File
+	;		With The Format: HRTAM_<build Number>.msi
+	;
+	 BetaInstaller_Regex := "i)HRTAM_(?P<Version>\d\.\d\.\d(\.\d)?)\.msi"
+	;____________________________________________________________
 
 
 
 
 
-;=================================================================
-;    STORE INI INFO TO OBJECT
-;=================================================================
+
+
+;=====================================================================
+;    C R E A T E   O B J E C T   W / U P D A T E   I N I   I N F O
+;=====================================================================
 	ini := new Ini(update_INI)
-
 
 
 
@@ -151,7 +152,7 @@ Icon_1=%In_Dir%\RTA Sheet Update.ahk_1.ico
 	;
 	BetaUserList := ini.BetaRelease.BetaUsers
 	
-	if A_UserName not contains %BetaUserList%
+	if A_UserName not in %BetaUserList%
 		ExitApp
 	;______________________________________________
 	

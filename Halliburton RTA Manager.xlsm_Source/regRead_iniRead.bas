@@ -1,4 +1,4 @@
-Attribute VB_Name = "INIread"
+Attribute VB_Name = "regRead_iniRead"
 
 Option Explicit
 Declare Function GetPrivateProfileString Lib "kernel32" Alias "GetPrivateProfileStringA" _
@@ -34,17 +34,17 @@ Public Declare Function RegCloseKey Lib "advapi32.dll" (ByVal hKey As Long) As L
 '       - *Last modified:*  2012-01-11
 ' ___________________________________________________________________________________________________
 ' ===================================================================================================
-Function INIread(ByVal filePath As String, ByVal SectionName As String, ByVal keyName As String)
+Function iniRead(ByVal filePath As String, ByVal SectionName As String, ByVal keyName As String)
         Dim RetVal As String, Exec As Integer, GetIni As String
-'        FileExists filePath
+        FileExists IniFile
         RetVal = String(255, 0)
         
-        Exec = GetPrivateProfileString(SectionName, keyName, "", RetVal, Len(RetVal), filePath)
+        Exec = GetPrivateProfileString(SectionName, keyName, "", RetVal, Len(RetVal), IniFile)
         
         If Len(Exec) = 0 Then
-            INIread = ""
+            GetKeyVal = ""
         Else
-            INIread = Left(RetVal, InStr(RetVal, Chr(0)) - 1)
+            GetKeyVal = Left(RetVal, InStr(RetVal, Chr(0)) - 1)
         End If
 End Function
 

@@ -6,8 +6,16 @@ Attribute VB_Name = "CMD_Line"
 '   Functions that call external functions/programs via the shell. Most functions here
 '   are related to the CMDline_Functions file packaged with the RTA Sheet (located in
 '   the RTA Sheet's root dir\Include folder).
+'
+' About:
+'   o Written by:    Rameen Bakhtiary
+'   o Last Modified: 2012-01-16
 ' ___________________________________________________________________________________________________
 ' ***************************************************************************************************
+
+
+
+
 
 
 
@@ -30,24 +38,15 @@ Attribute VB_Name = "CMD_Line"
 ' Last Modified: 2012-01-16
 ' ___________________________________________________________________________________________________
 ' ===================================================================================================
-Sub CMDline_Func(cmdSwitch As String, Optional param2 = "", Optional param3 As String = "", Optional param4 = "", Optional param5 = "")
-    '___________________________
-    '       GET THE COMMAND LINE
-    '
-    paramList = cmdSwitch & " " & """" & param2 & """" & " " & """" & param3 & """" & " " & """" & param4 & """" & " " & """" & param5 & """"
-    
-    '_________________________________
-    '       CALL CMDLINE_FUNCTIONS.EXE
-    '
-    CMDline_Func = Shell("""" & myPath & "\Include\CMDline_Functions.exe"" " & paramList, vbNormalFocus)
-End Sub
+  Function CMDline_Func(cmdSwitch As String, Optional param2 = "", Optional param3 As String = "", Optional param4 = "", Optional param5 = "") As Double
+      paramList = cmdSwitch & " " & """" & param2 & """" & " " & """" & param3 & """" & " " & """" & param4 & """" & " " & """" & param5 & """"
+      CMDline_Func = Shell("""" & myPath & "\Include\CMDline_Functions.exe"" " & paramList, vbNormalFocus)
+  End Function
   
   
   
   
-  Sub splash()
-
-  End Sub
+  
   
   
   

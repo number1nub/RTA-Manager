@@ -21,13 +21,11 @@ Private Sub CommandButton1_Click()
     On Error Resume Next
     
     
-    '_____________________________________________________
-    '       ASSIGN VALUES TO THE USER-SPECIFIC GLOBAL VARS
-    '
-    initGlobals
+    initializeGlobals
     
-    Dim fsO As Object
-    set fsO=
+    
+    
+       
     
     '===============================================================
     '               RUN THE UPDATE CHECKER (IF FOUND)
@@ -78,6 +76,5 @@ Private Sub CommandButton1_Click()
             Sheet1.Activate
             Sheet7.Visible = xlSheetHidden
 End Sub
-
 
 

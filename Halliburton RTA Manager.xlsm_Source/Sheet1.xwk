@@ -133,13 +133,7 @@ Attribute VB_Exposed = True
     '===================================================
     Private Sub tools_Click()
         Application.ScreenUpdating = False
-        
-        '_____________________________________
-        '       VERIFY THAT GLOBALS ARE LOADED
-        '
-        If Not pubInit Then initGlobals
-        
-        
+
         ' Check that RTA Sheet Tools.exe is found; else prompt and abort
         '=====================================================================
         If Dir(myPath & "\Include\RTA Sheet Tools.exe") = "" Then
@@ -178,7 +172,6 @@ Attribute VB_Exposed = True
         Range("a1").Select
         Application.ScreenUpdating = True
 
-
         ' Launch RTA Sheet Tools.exe
         '============================
         paramList = """" & headers & """" & " """ & viscols & """"
@@ -201,10 +194,7 @@ Attribute VB_Exposed = True
     '                        REFRESH  BUTTON
     '==================================================
     Private Sub RefreshMain_Click()
-        
-        Call CMDline_Func("/splash", vbNewLine & vbNewLine & "RTA Data is being refreshed...")
-        
-        
+'        Call CMDline_Func("/splash", vbNewLine & vbNewLine & "RTA Data is being refreshed...")
         Application.ScreenUpdating = False
         On Error Resume Next
         

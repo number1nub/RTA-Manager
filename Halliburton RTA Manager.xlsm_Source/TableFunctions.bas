@@ -1,4 +1,4 @@
-Attribute VB_Name = "FilterAndSort"
+Attribute VB_Name = "TableFunctions"
 '___________________________________________________________________________________________________
 '***************************************************************************************************
 '   Title: FILTER_AND_SORT
@@ -19,132 +19,108 @@ Attribute VB_Name = "FilterAndSort"
 
 
 
-
-'____________________________________________________________________________________________________
-'====================================================================================================
-' Function:     getSettings
-'
-' Written by:   Rameen Bakhtiary
-' Created on:   10/24/2011
-' Description:
-'               Return an array of values in a given named range.
-'               Used to get the custom filter setting values for a lab office for table sorting
-' Parameters:
-'               rgName - Name of named-range in current sheet
-'
-'====================================================================================================
-Function getSettings(rgname As Variant) As Variant
-    'Each customizable value can have up to 10 filter items
-    Dim farray(1 To 10) As String
-    Set newrg = Application.Range(rgname)
     
+    '____________________________________________________________________________________________________
+    '====================================================================================================
+    ' Function:     getSettings
+    '
+    ' Written by:   Rameen Bakhtiary
+    ' Created on:   10/24/2011
+    ' Description:
+    '               Return an array of values in a given named range.
+    '               Used to get the custom filter setting values for a lab office for table sorting
+    ' Parameters:
+    '               rgName - Name of named-range in current sheet
+    '
+    '====================================================================================================
+    Function getSettings(rgname As Variant) As Variant
+        'Each customizable value can have up to 10 filter items
+        Dim farray(1 To 10) As String
+        Set newrg = Application.Range(rgname)
+        
+        
+        i = 1
+        For Each itm In newrg
+            If itm <> "" Then
+                farray(i) = itm
+                i = i + 1
+            End If
+        Next
+        getSettings = farray
+    End Function
     
-    i = 1
-    For Each itm In newrg
-        If itm <> "" Then
-            farray(i) = itm
-            i = i + 1
-        End If
-    Next
-    getSettings = farray
-End Function
-
     
       
       
 
 
-'____________________________________________________________________________________________________
-'====================================================================================================
-' Sub:          sortBy  (Main table sort routine)
-'
-' Written by:   Rameen Bakhtiary
-' Description:
-'               Applies filters to main RTA table based on custom lab office settings when one of
-'               the lab office buttons is pressed
-' Parameters:
-'               prefix - String prefix of lab office to filter by
-' Remarks:
-'               Relies on getSettings() and getCol() functions
-'
-'====================================================================================================
-Sub sortBy(prefix As String)
-    If Application.Range("inproc") = 1 Then Exit Sub
-    Application.ScreenUpdating = False
-    Application.Range("inProc") = 1
-    
-    
-    '=============================================================
-    '        Remove the filter drop downs from headers
-    '=============================================================
-    For Each c In Range("Main[#Headers]")
-        ActiveSheet.ListObjects("Main").Range.AutoFilter Field:=getCol(c), visibledropdown:=False
-    Next
-    
-    
-    
-    
-    '_______________________________  APPLY FILTER SETTINGS TO TABLE ___________________________________
-    '%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%
-                
-    '_________________
-    '       RTA  STATE
+    '____________________________________________________________________________________________________
+    '====================================================================================================
+    ' Sub:          sortBy  (Main table sort routine)
     '
-    ActiveSheet.ListObjects("Main").Range.AutoFilter Field:=getCol("State"), _
-        Criteria1:=getSettings(prefix & "State"), Operator:=xlFilterValues
-    
-    '_________________
-    '       LAB OFFICE
+    ' Written by:   Rameen Bakhtiary
+    ' Description:
+    '               Applies filters to main RTA table based on custom lab office settings when one of
+    '               the lab office buttons is pressed
+    ' Parameters:
+    '               prefix - String prefix of lab office to filter by
+    ' Remarks:
+    '               Relies on getSettings() and getCol() functions
     '
-    ActiveSheet.ListObjects("Main").Range.AutoFilter Field:=getCol("Lab Office"), _
-        Criteria1:=getSettings(prefix & "Lab"), Operator:=xlFilterValues
+    '====================================================================================================
+    Sub sortBy(prefix As String)
+        If Application.Range("inproc") = 1 Then Exit Sub
+        Application.ScreenUpdating = False
+        Application.Range("inProc") = 1
+        
+        
+        '=============================================================
+        '        Remove the filter drop downs from headers
+        '=============================================================
+        For Each c In Range("Main[#Headers]")
+            ActiveSheet.ListObjects("Main").Range.AutoFilter Field:=getCol(c), visibledropdown:=False
+        Next
+        
+        
+        
+        
+        '_______________________________  APPLY FILTER SETTINGS TO TABLE ___________________________________
+        '%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%
+                    
+        '_________________
+        '       RTA  STATE
+        '
+        ActiveSheet.ListObjects("Main").Range.AutoFilter Field:=getCol("State"), _
+            Criteria1:=getSettings(prefix & "State"), Operator:=xlFilterValues
+        
+        '_________________
+        '       LAB OFFICE
+        '
+        ActiveSheet.ListObjects("Main").Range.AutoFilter Field:=getCol("Lab Office"), _
+            Criteria1:=getSettings(prefix & "Lab"), Operator:=xlFilterValues
+        
+        '_______________
+        '       RTA TYPE
+        '
+        ActiveSheet.ListObjects("Main").Range.AutoFilter Field:=getCol("Type"), _
+            Criteria1:=getSettings(prefix & "Type"), Operator:=xlFilterValues
+        
+        '_______________
+        '       RTA CODE
+        '
+        ActiveSheet.ListObjects("Main").Range.AutoFilter Field:=getCol("Code"), _
+            Criteria1:=getSettings(prefix & "Code"), Operator:=xlFilterValues
+        '___________________________________________________________________________________________________
+        
     
-    '_______________
-    '       RTA TYPE
-    '
-    ActiveSheet.ListObjects("Main").Range.AutoFilter Field:=getCol("Type"), _
-        Criteria1:=getSettings(prefix & "Type"), Operator:=xlFilterValues
     
-    '_______________
-    '       RTA CODE
-    '
-    ActiveSheet.ListObjects("Main").Range.AutoFilter Field:=getCol("Code"), _
-        Criteria1:=getSettings(prefix & "Code"), Operator:=xlFilterValues
-    '___________________________________________________________________________________________________
-    
+        If Application.Range("sheetviewmode") = "PMT" Then ActiveSheet.gotoDept.Visible = True
+        Application.Range("cfilt") = prefix
+        Application.Range("inProc") = 0
+        ActiveSheet.Range("a1").Select
+        Application.ScreenUpdating = True
+    End Sub
 
-
-    If Application.Range("sheetviewmode") = "PMT" Then ActiveSheet.gotoDept.Visible = True
-    Application.Range("cfilt") = prefix
-    Application.Range("inProc") = 0
-    ActiveSheet.Range("a1").Select
-    Application.ScreenUpdating = True
-End Sub
-
-
-
-
-
-
-
-
-
-
-'____________________________________________________________________________________________________
-'====================================================================================================
-' Function:     getCol
-'
-' Written by:   Rameen Bakhtiary
-' Created on:   10/24/2011
-' Description:
-'               Returns the column number of a column given its header text
-' Parameters:
-'               header - String column header title of column whose number will be returned
-'
-'====================================================================================================
-Function getCol(header As Variant) As Integer
-    getCol = Range("Main[[#Headers],[" & header & "]]").Column
-End Function
 
 
 

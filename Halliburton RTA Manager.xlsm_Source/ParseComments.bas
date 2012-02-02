@@ -2,10 +2,22 @@ Attribute VB_Name = "ParseComments"
 ' ___________________________________________________________________________________________________
 ' ***************************************************************************************************
 ' Module: ParseComments
+'
 '   This module contains routines and functions that parse through the contents of the
 '   comments field in order to find certain information.
+'
+'   o Priority number is pulled from comments
+'   o
+'
+' About:
+'   o Written by:    Rameen Bakhtiary
+'   o Last Modified: 2012-11-28
 ' ___________________________________________________________________________________________________
 ' ***************************************************************************************************
+
+
+
+
 
 
 
