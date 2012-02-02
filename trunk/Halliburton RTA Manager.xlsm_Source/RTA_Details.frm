@@ -31,6 +31,8 @@ Public saved As Boolean
 
 
 
+
+
 '____________________________________________________________________________________________________
 '====================================================================================================
 '   Sub: UserForm_Initialize
@@ -48,7 +50,7 @@ Private Sub UserForm_Initialize()
     '___________________________
     '       FILL THE RTA INFO IN
     '
-    rtaNum.Caption = "RTA " & thisRta
+    rtaNUm.Caption = "RTA " & thisRta
     class = thisClass
     desc = thisDescription
     comments = thisComment
@@ -56,7 +58,7 @@ Private Sub UserForm_Initialize()
     Department = thisDept
     techrevdate = thisTRDD
     lab = thisLabOffice
-    rtatype = thisType
+    rtaType = thisType
     rtacode = thisCode
     requestor = thisRequestor
     state = thisState
@@ -109,7 +111,7 @@ End Sub
 
 
 
-
+ 
 
 '
 '===================================================================================================
@@ -120,26 +122,45 @@ End Sub
 '===================================================================================================
 Private Sub emailSubmitter_Click()
     
-    Dim olApp As Object
-    Dim olMsg As Object
+    emailstring = "mailto:" & thisRequestorEmail & _
+                "?cc=" & RtaLiasonEmail & _
+                "&subject=RTA " & thisRta & _
+                "&body=" & thisRequestor & "," & vbNewLine & vbNewLine
 
-    Set olApp = GetObject(, "Outlook.Application")
-    If olApp Is Nothing Then
-        Set olApp = CreateObject("Outlook.Application")
-    End If
+    ActiveWorkbook.FollowHyperlink emailstring
 
-    Const olMailItem = 0
-    Set olMsg = olApp.CreateItem(olMailItem)
-    With olMsg
-        .To = Cells
-        
-    
-    'Decide what to do with the mailitem
-    '    .Send
-    '    .Display
-    '    .Save   'New messages always save in Drafts, regardless of what folder you use for the Items.Add method.
-    End With
-    
+
+'    Set OutApp = CreateObject("Outlook.Application")
+'    OutApp.Session.Logon
+'    Set OutMail = OutApp.CreateItem(0)
+'
+'    On Error Resume Next
+'    With OutMail
+'    .To = thisRequestorEmail
+'    .CC = RtaLiasonEmail
+'    .Subject = "RTA " & thisRta
+'    .HTMLBody = thisRequestor & "," & Chr(10) & Chr(10)
+'    .Display
+'    End With
+'
+'
+'
+'    Dim olApp As Object
+'    Dim olMsg As Object
+'
+'    Set olApp = GetObject(, "Outlook.Application")
+'    If olApp Is Nothing Then
+'        Set olApp = CreateObject("Outlook.Application")
+'    End If
+'
+'    Const olMailItem = 0
+'    Set olMsg = olApp.CreateItem(olMailItem)
+'    With olMsg
+'        .To = thisRequestorEmail
+'        .Subject = "RTA " & thisRta
+'        .display
+'    End With
+'
     
         
         
@@ -278,7 +299,7 @@ Sub openCWIpage(Optional view As String = "rta")
     'Check for CMDline_Functions
     '===============================
     progP = myPath & "\Include\CMDline_Functions.exe"
-    formattedRTAnum = Right(rtaNum.Caption, 6)
+    formattedRTAnum = Right(rtaNUm.Caption, 6)
     
     If Dir(progP) = "" Then
         Call MsgBox("Uh oh... An important file couldn't be found:  CMDline_Functions.exe" & _
@@ -345,7 +366,7 @@ Private Sub uploadToCWI_Click()
     
     ' Formatted RTA Number R00000XXXXXX
     '==================================
-    tmp = "R00000" & Strings.Right(rtaNum.Caption, 6)
+    tmp = "R00000" & Strings.Right(rtaNUm.Caption, 6)
     
     
     ' Find the first open cell on RTAimport sheet or find the same

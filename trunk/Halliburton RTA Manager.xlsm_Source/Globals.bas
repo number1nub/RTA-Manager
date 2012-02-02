@@ -49,6 +49,7 @@ Attribute VB_Name = "Globals"
     '
         Public CanWrite As Boolean
     
+        Public Const RtaLiasonEmail As String = "Dana.Moe@halliburton.com"
     
     '_________________________________________
     '       USER-SPECIFIC   GLOBAL   VARIABLES
@@ -75,11 +76,13 @@ Attribute VB_Name = "Globals"
         Public thisComments As String
         Public thisAssignedto As String
         Public thisDept As String
-        Public thisTechrevdate As String
+        Public thisTRDD As String
         Public thisLabOffice As String
         Public thisType As String
         Public thisCode As String
         Public thisRequestor As String
+        Public thisRequestorEmail As String
+        Public thisSubmitter As String
         Public thisState As String
         
         
@@ -183,7 +186,7 @@ Public Sub getCurrent()
     thisType = Cells(thisRow, getCol("type"))
     thisCode = Cells(thisRow, getCol("code"))
     thisRequestor = Cells(thisRow, getCol("requestor name"))
-    thisRequestorEmail = Cells(thisRow, getCol("requestor email"))
+    thisequestorEmail = Cells(thisRow, getCol("requestor email"))
     thisSubmitter = Cells(thisRow, getCol("requestor name"))
     thisState = Cells(thisRow, getCol("state"))
     
