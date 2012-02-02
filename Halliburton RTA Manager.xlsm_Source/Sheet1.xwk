@@ -202,7 +202,8 @@ Attribute VB_Exposed = True
     '==================================================
     Private Sub RefreshMain_Click()
         
-        Call CMDline_Func("/splash", vbNewLine & vbNewLine & "RTA Data is being refreshed...")
+        splash ("Loading RTA information and updating table. " & vbNewLine & _
+                 vbNewLine & "Data is being refreshed...")
         
         
         Application.ScreenUpdating = False
@@ -228,9 +229,13 @@ Attribute VB_Exposed = True
         Call sortField(" ", "A")
         Call selectTop
         Range("a1").Select
-'        splashOFF.Show
+
+                
+        '__________________________
+        '       TURN OFF THE SPLASH
+        '
+        splash
         
-'        Call MsgBox("hi", , "RTA Manager - Splash Off")
         Application.ScreenUpdating = True
     End Sub
     
@@ -443,6 +448,9 @@ Attribute VB_Exposed = True
                 Selection.ListObject.QueryTable.refresh
                 Call sortField(" ", "A")
                 
+                'Make sure globals are assigned
+                '=================================
+                If Not pubInit Then initGlobals
                 
                 
                 ' Handle loading file to CWI (run CMDline_Functions.exe /load)

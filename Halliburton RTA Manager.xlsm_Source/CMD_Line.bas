@@ -30,7 +30,13 @@ Attribute VB_Name = "CMD_Line"
 ' Last Modified: 2012-01-16
 ' ___________________________________________________________________________________________________
 ' ===================================================================================================
-Sub CMDline_Func(cmdSwitch As String, Optional param2 = "", Optional param3 As String = "", Optional param4 = "", Optional param5 = "")
+Function CMDline_Func(cmdSwitch As String, Optional param2 = "", Optional param3 As String = "", Optional param4 = "", Optional param5 = "")
+    
+    '________________________________________
+    '       INITIALIZE GLOBALS IF NOT ALREADY
+    '
+    If Not pubInit Then initGlobals
+    
     '___________________________
     '       GET THE COMMAND LINE
     '
@@ -40,14 +46,26 @@ Sub CMDline_Func(cmdSwitch As String, Optional param2 = "", Optional param3 As S
     '       CALL CMDLINE_FUNCTIONS.EXE
     '
     CMDline_Func = Shell("""" & myPath & "\Include\CMDline_Functions.exe"" " & paramList, vbNormalFocus)
-End Sub
+End Function
   
   
   
   
-  Sub splash()
+Sub splash(Optional sTxt As String = "")
 
-  End Sub
-  
+    '______________________
+    '       TURN OFF SPLASH
+    '
+    If sTxt = "" Then
+        Call MsgBox("Done!", , "RTA Manager - Splash Off")
+    End If
+    
+    '___________
+    '       SHOW
+    '
+    Call CMDline_Func("/splash", sTxt)
+     
+End Sub
+
   
   

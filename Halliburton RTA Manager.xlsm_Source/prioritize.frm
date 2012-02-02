@@ -23,7 +23,7 @@ Attribute VB_Exposed = False
 '      INITIALIZE GUI - GET EXISTING PRIORITY
 '==================================================
 Private Sub UserForm_Initialize()
-    rtaNum.Caption = "RTA " & Cells(ActiveCell.Row, getCol("RTA"))
+    rtaNUm.Caption = "RTA " & Cells(ActiveCell.Row, getCol("RTA"))
     priorty = ActiveCell.Text
 End Sub
 

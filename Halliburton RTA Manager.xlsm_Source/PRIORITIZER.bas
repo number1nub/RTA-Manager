@@ -89,7 +89,7 @@ Sub prioritize_ReOrder()
         '____________________________
         '   DISPLAY THE SPLASH SCREEN
         '
-        Call CMDline_Func("/splash", "Running The Prioritizer" & vbNewLine & "Please wait...")
+        Call splash("The RTA list is being re-numbered. " & vbNewLine & "Please wait...")
         
         
         '_________________________
@@ -189,7 +189,8 @@ Sub prioritize_ReOrder()
     
     'Turn off splash
     '=================
-    Call MsgBox("Done!", , "RTA Manager - Splash Off")
+    splash
+        
     
     'Warn about refreshing data
     '==============================

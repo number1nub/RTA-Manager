@@ -26,8 +26,7 @@ Private Sub CommandButton1_Click()
     '
     initGlobals
     
-    Dim fsO As Object
-    set fsO=
+
     
     '===============================================================
     '               RUN THE UPDATE CHECKER (IF FOUND)
