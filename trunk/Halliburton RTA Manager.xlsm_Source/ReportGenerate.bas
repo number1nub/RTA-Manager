@@ -140,7 +140,7 @@ Attribute VB_Name = "ReportGenerate"
         '=============================
         promptTxt = _
             "PDF priority list was saved in the Generated Reports folder."
-        Call CMDline_Func("/popup", promptTxt, loname & " Priority Report")
+        Call CMDline("/popup", promptTxt, loname & " Priority Report")
         Application.ScreenUpdating = True
     End Sub
 

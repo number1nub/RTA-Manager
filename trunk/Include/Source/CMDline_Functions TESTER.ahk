@@ -5,7 +5,7 @@ SendMode, Input
 DetectHiddenText, on
 DetectHiddenWindows, on
 SetTitleMatchMode, 2
-Init := Functions()
+;~ Init := Functions()
 ;-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 
@@ -35,33 +35,9 @@ enter::
 buttonSubmit:
 	gui, submit
 	gui, destroy
-	params := p1 (txt ? " """ txt """": " """"") (title ? " """ title """": " """"") (dur ? " """ dur """": " """"") (run ? " """ run """": " """"")
+	params := p1 (txt ? " "`"" txt "`""": " "`"""") (title ? " "`"" title "`""": " "`"""") (dur ? " "`"" dur "`""": " "`"""") (run ? " "`"" run "`""": " "`"""")
 	run, cmdline_functions.ahk %params%
 ExitApp
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

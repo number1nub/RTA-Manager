@@ -25,8 +25,7 @@ Attribute VB_Exposed = False
 '___________________________________________________________________________________________________
 '***************************************************************************************************
 
-Public saved As Boolean
-
+Public savedForm As Boolean
 
 
 
@@ -101,10 +100,10 @@ Private Sub UserForm_Initialize()
         Department.Enabled = True
     End If
     
-    saved = True
-    desc.SelStart = 0
+    savedForm = True
     uploadToCWI.Enabled = False
-
+    desc.SetFocus
+    desc.SelStart = 0
 End Sub
 
 
@@ -120,49 +119,34 @@ End Sub
 '   Open a new email to the RTA requestor
 '
 '===================================================================================================
-Private Sub emailSubmitter_Click()
+Private Sub emailRequestor_Click()
     
+    '______________________________
+    '   GET FIRST NAME OF REQUESTOR
+    '
+    Dim firstName As String, name As String
+    name = Trim(Split(thisRequestor, " ", , vbTextCompare))
+    firstName = name(0)
+    
+    
+    '__________________________________________________
+    '   MAKE SURE THERE ARE NO CHANGES TO SAVE B4
+    '   CLOSING THE GUI & OPENING AN EMAIL
+    '
+    If Application.Range("sheetviewmode") = "EDIT" And savedForm = False Then
+        Call uploadToCWI_Click
+    End If
+    
+    '________________________________________________________________
+    '    OPEN AN EMAIL TO THE REQUESTOR W/THE RTA IN THE SUBJECT &
+    '    THE 'RTALIASONEMAIL' (SET IN GLOBAL SETTINGS) AS A CC
+    '
     emailstring = "mailto:" & thisRequestorEmail & _
                 "?cc=" & RtaLiasonEmail & _
                 "&subject=RTA " & thisRta & _
-                "&body=" & thisRequestor & "," & vbNewLine & vbNewLine
+                "&body=" & firstName & ", " & Chr(10) & Chr(10)
 
     ActiveWorkbook.FollowHyperlink emailstring
-
-
-'    Set OutApp = CreateObject("Outlook.Application")
-'    OutApp.Session.Logon
-'    Set OutMail = OutApp.CreateItem(0)
-'
-'    On Error Resume Next
-'    With OutMail
-'    .To = thisRequestorEmail
-'    .CC = RtaLiasonEmail
-'    .Subject = "RTA " & thisRta
-'    .HTMLBody = thisRequestor & "," & Chr(10) & Chr(10)
-'    .Display
-'    End With
-'
-'
-'
-'    Dim olApp As Object
-'    Dim olMsg As Object
-'
-'    Set olApp = GetObject(, "Outlook.Application")
-'    If olApp Is Nothing Then
-'        Set olApp = CreateObject("Outlook.Application")
-'    End If
-'
-'    Const olMailItem = 0
-'    Set olMsg = olApp.CreateItem(olMailItem)
-'    With olMsg
-'        .To = thisRequestorEmail
-'        .Subject = "RTA " & thisRta
-'        .display
-'    End With
-'
-    
-        
         
 End Sub
 
@@ -171,6 +155,13 @@ End Sub
 
 
 
+' ___________________________________________________________________________________________________
+' ===================================================================================================
+' Sub: resetME_Click  -  RESET BUTTON
+'
+' Last Modified: 2012-02-02
+' ___________________________________________________________________________________________________
+' ===================================================================================================
 Private Sub resetME_Click()
     Call UserForm_Initialize
 End Sub
@@ -180,7 +171,7 @@ End Sub
 '____________________________________________________________________________________________________
 '====================================================================================================
 '   Sub: changeMade
-'       Make note when any change is made to the GUI and mark it as NOT SAVED. Notify the user
+'       Make note when any change is made to the GUI and mark it as NOT savedForm. Notify the user
 '       if they close without saving
 '
 ' Remarks:
@@ -209,7 +200,7 @@ Private Sub techrevdate_Change()
     Call changeMade
 End Sub
 Sub changeMade()
-    saved = False
+    savedForm = False
     If Application.Range("sheetViewMode") <> "PMT" Then uploadToCWI.Enabled = True
 End Sub
 
@@ -242,10 +233,6 @@ End Sub
 
 Private Sub printRta_Click()
     Call openCWIpage("p")
-End Sub
-
-Private Sub openRTA_Click()
-    Call openCWIpage
 End Sub
 
 
@@ -282,9 +269,21 @@ End Sub
 '   view.
 '
 ' Parameters:
-'   view    -
+'   view    -   (Optional) A 1 to 3 letter identifier that determines what CWI view to open
+'               the RTA in. See the list below.
 '
-' Last Modified: 2012-01-14
+' View modes:
+'   n           -   Opens in Navigate view
+'   sig         -   Opens in View Approvals/Promote view
+'   wu          -   Opens in Where Used view
+'   m           -   Opens in Modify view
+'   rta         -   Opens in CreateModify RTA view
+'   h           -   Opens history of the part
+'   p           -   Opens print view
+' Blank or any other  -   Open in StructureManagement
+'
+'
+' Last Modified: 2012-02-04
 ' ___________________________________________________________________________________________________
 ' ===================================================================================================
 Sub openCWIpage(Optional view As String = "rta")
@@ -294,13 +293,11 @@ Sub openCWIpage(Optional view As String = "rta")
     '
     If Not pubInit Then initGlobals
     
-    
-    
-    'Check for CMDline_Functions
-    '===============================
-    progP = myPath & "\Include\CMDline_Functions.exe"
-    formattedRTAnum = Right(rtaNUm.Caption, 6)
-    
+
+    '____________________________________________________________________
+    ' THIS IS GETTING A BIT (VERY) UNNECESSARY SINCE SHEET DOESN'T ALLOW
+    ' ENTRY IF THIS ISN'T TRUE...
+    '
     If Dir(progP) = "" Then
         Call MsgBox("Uh oh... An important file couldn't be found:  CMDline_Functions.exe" & _
             vbCrLf & "" & vbCrLf & "Without it, you cannot open RTAs directly in CWI. This file should be located" & _
@@ -309,17 +306,20 @@ Sub openCWIpage(Optional view As String = "rta")
         Exit Sub
     End If
     
-    
-    'In edit mode... check for changes & save b4 closing GUI
-    '=========================================================
+    '________________________________________________________
+    ' IN EDIT MODE... CHECK FOR CHANGES & SAVE B4 CLOSING GUI
+    '
     If Application.Range("sheetviewmode") = "Edit" Then
-        If saved = False Then Call uploadToCWI_Click
+        If savedForm = False Then Call uploadToCWI_Click
     End If
     
-    'Close the GUI and open IE
-    '============================
+    
+    '_____________________________
+    ' CLOSE THE GUI AND OPEN IE
+    '
     Unload Me
-    Call Shell("""" & progP & """ " & formattedRTAnum & " " & view, vbNormalFocus)
+    
+    Call CMDline("""" & progP & """ " & thisRta & " " & view, vbNormalFocus)
     Exit Sub
 End Sub
 
@@ -330,12 +330,12 @@ End Sub
 '____________________________________________________________________________________________________
 '====================================================================================================
 '   Sub: closeME_Click
-'       Check that all changes have been saved and close the GUI
+'       Check that all changes have been savedForm and close the GUI
 '
 '====================================================================================================
 Private Sub closeME_Click()
-    If saved = False And Application.Range("sheetviewmode") <> "PMT" Then
-        ans = MsgBox("" & vbCrLf & "You made changes to this RTA that have not been saved." & vbCrLf & "" & vbCrLf & "DISCARD CHANGES?", _
+    If savedForm = False And Application.Range("sheetviewmode") <> "PMT" Then
+        ans = MsgBox("" & vbCrLf & "You made changes to this RTA that have not been savedForm." & vbCrLf & "" & vbCrLf & "DISCARD CHANGES?", _
                 vbYesNo Or vbExclamation Or vbSystemModal Or vbDefaultButton1, "     DISCARD CHANGES??")
         If ans = vbNo Then desc.SetFocus: Exit Sub
     End If
@@ -364,24 +364,20 @@ Private Sub uploadToCWI_Click()
     rtasht.Visible = xlSheetVisible
     rtasht.Select
     
-    ' Formatted RTA Number R00000XXXXXX
-    '==================================
-    tmp = "R00000" & Strings.Right(rtaNUm.Caption, 6)
-    
     
     ' Find the first open cell on RTAimport sheet or find the same
     ' RTA already on the sheet to overwrite
     '===============================================================
     r = 1
     While Cells(r, 1) <> ""
-        If Cells(r, 2) = tmp Then GoTo overwrite
+        If Cells(r, 2) = thisRtaLong Then GoTo overwrite
         r = r + 1
     Wend
     
     
 overwrite:
     Range("a" & r) = "Rta"
-    Range("b" & r) = tmp
+    Range("b" & r) = thisRtaLong
     
     
     ' Remove carriage returns & remove multiple blank lines
@@ -484,24 +480,23 @@ End Sub
 
 
 
-'___________________________________________________________________________________________________
-'***************************************************************************************************
-'   Sub: wmComment_Click
+' ___________________________________________________________________________________________________
+' ===================================================================================================
+' Sub: wmComment_Click
 '       Inserts the formatted weekly meeting comment start (YYYY-MM-DD, WM: ) at the bottom of the
 '       description
 '
-'   Group: About
-'       - *Written by:* Rameen Bakhtiary
-'       - *Last modified:*  2012-01-10
-'___________________________________________________________________________________________________
-'***************************************************************************************************
+' Last Modified:
+'       2012-02-01
+' ___________________________________________________________________________________________________
+' ===================================================================================================
 Private Sub wmComment_Click()
     
     If Application.Range("sheetviewmode") = "PMT" Then Call MsgBox( _
         "You must be in Edit mode to insert a weekly meeting comment!", _
         vbExclamation Or vbSystemModal, "Insert Weekly Meeting Comments"): Exit Sub
 
-    insertTxt = Chr(10) & Chr(10) & Format(Now(), "yyyy-MM-dd") & ", WM: "
+    insertTxt = Chr(10) & Chr(10) & Format(Now(), WeeklyMeetingDateFormat) & WeeklyMeetingInitialsFormat
     desc = desc & insertTxt
     desc.SelStart = 5000
     
@@ -509,24 +504,26 @@ End Sub
 
 
 
-
-
 ' ___________________________________________________________________________________________________
 ' ===================================================================================================
 '   Sub: liasonComment_Click
 '
+' Last Modified:
+'       2012-2-4
 ' ___________________________________________________________________________________________________
 ' ===================================================================================================
 Private Sub liasonComment_Click()
 
-    
+    '___________________________________________________
+    '   NOT IN EDIT MODE - OR - HAS 'NO COMMENT' MODE ON
+    '   ("No comment" mode not yet implemented)
+    '
     If Application.Range("sheetviewmode") = "PMT" Then Call MsgBox( _
         "You must be in Edit mode to insert a comment!", _
         vbExclamation Or vbSystemModal, "Insert Comments"): Exit Sub
-
     
 
-    insertTxt = Chr(10) & Chr(10) & Format(Now(), "yyyy-MM-dd") & ", WM: "
+    insertTxt = Chr(10) & Chr(10) & Format(Now(), LiasonCommentDateFormat) & LiasonCommentInitialsFormat
     desc = desc & insertTxt
     desc.SelStart = 5000
 End Sub

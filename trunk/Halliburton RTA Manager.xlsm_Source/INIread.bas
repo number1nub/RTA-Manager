@@ -35,7 +35,7 @@ Public Declare Function RegCloseKey Lib "advapi32.dll" (ByVal hKey As Long) As L
 ' ___________________________________________________________________________________________________
 ' ===================================================================================================
 Function INIread(ByVal filePath As String, ByVal SectionName As String, ByVal keyName As String)
-        Dim RetVal As String, Exec As Integer, GetIni As String
+        Dim RetVal As String, Exec As Integer
 '        FileExists filePath
         RetVal = String(255, 0)
         

@@ -43,7 +43,7 @@ Attribute VB_Name = "Settings_Functions"
           fsMode = "OFF"
           Application.DisplayFullScreen = False
       End If
-      Call CMDline_Func("/popUp", "", "Full-Screen mode: " & fsMode, 2)
+      Call CMDline("/popUp", "", "Full-Screen mode: " & fsMode, 2)
   End Sub
   
 

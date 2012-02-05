@@ -8,8 +8,9 @@ Attribute VB_Name = "Globals"
 
 
 
+
 '===================================================================================================
-'                                   F O L D E R    P A T H S
+'                              C O N S T A N T     F O L D E R    P A T H S
 '===================================================================================================
   
     '________________________________
@@ -38,18 +39,57 @@ Attribute VB_Name = "Globals"
     '
         Public Const UPDATE_PATH As String = WDPUB & "Rameen Bakhtiary\wdRTApush.exe"
 
+
+
+'===================================================================================================
+'                             S H E E T      S E T T I N G S
+'===================================================================================================
+
     '____________________________________________________
     '       DEFAULT SHEET PASSWORD (USED FOR SWITCH MODE)
     '
         Public Const DEFAULT_PW As String = "wdr74!"
 
     
-    '_________________________________
-    '       USER WRITE ACCESS SETTINGS
+    '_______________________________________________________________________
+    '       LIST OF EMAILS TO 'CC:' WHEN THE EMAIL REQUESTOR BUTTON PRESSED
+    '       (List as one string, separate with semi-colons (;) )
     '
-        Public CanWrite As Boolean
-    
         Public Const RtaLiasonEmail As String = "Dana.Moe@halliburton.com"
+        
+    '_________________________________________________________________________
+    '       FORMAT OF THE COMMENT LINE START FOR LIASON/COMMENTS SECTION
+    '
+        Public Const LiasonCommentDateFormat As String = "M/d/yyyy"
+        Public Const LiasonCommentInitialsFormat As String = " DM, "
+        
+    '_________________________________________________________________________
+    '       FORMAT OF THE COMMENT LINE START FOR DESCRIPTION / WEEKLY MEETING
+    '
+        Public Const WeeklyMeetingDateFormat As String = "yyyy-MM-dd"
+        Public Const WeeklyMeetingInitialsFormat As String = ", WM: "
+        
+    '_____________________________________________
+    '       DETERMINES IF USER CAN WRITE COMMENTS
+    '       (For use in liason mode)
+    '
+        Public CanComment As Boolean        ''' Not yet implemented
+
+
+
+
+
+
+'===================================================================================================
+'        U S E R   S P E C I F I C    P A T H S - A S S I G N   O N   S T A R T
+'===================================================================================================
+    
+    '________________________________________
+    '       PATHS TO THE INCLUDED EXE FILES
+    '
+        Public CMDlinePath As String
+        Public SheetToolsPath As String
+    
     
     '_________________________________________
     '       USER-SPECIFIC   GLOBAL   VARIABLES
@@ -73,7 +113,7 @@ Attribute VB_Name = "Globals"
         Public thisClass As String
         Public thisClassLong As String
         Public thisDescription As String
-        Public thisComments As String
+        Public thisComment As String
         Public thisAssignedto As String
         Public thisDept As String
         Public thisTRDD As String
@@ -85,9 +125,9 @@ Attribute VB_Name = "Globals"
         Public thisSubmitter As String
         Public thisState As String
         
+      
         
-        
-    
+' %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%
     
 ' ===================================================================================================
 ' I N I T I AL I Z E   G L O B A L    S H E E T    V A R I A B L E S
@@ -104,12 +144,12 @@ Public Sub initGlobals()
     '___________________________________
     '       RTA SHEET TOOLS.EXE FILEPATH
     '
-    colPicker = myPath & "\Include\RTA Sheet Tools.exe"
+    SheetToolsPath = myPath & "\Include\RTA Sheet Tools.exe"
     
     '_____________________________________
     '       CMDline_Functions.exe FILEPATH
     '
-    CMDline = myPath & "\Include\CMDline_Functions.exe"
+    CMDlinePath = myPath & "\Include\CMDline_Functions.exe"
     
     
     '____________________________________________________________________
@@ -137,27 +177,27 @@ End Sub
 
 
 
-' ===================================================================================================
-' I N I T I AL I Z E   G L O B A L    S H E E T    V A R I A B L E S
-'
-'   o thisRow           - Current row number
-'   o thisRTA           - Current RTA number
-'   o thisRTAlong       - RTA number in R00000XXXXXX format
-'   o thisClass         - Current RTAs class
-'   o thisClassLong     - Full class name as in CWI
-'   o thisDescription   - Current RTAs description
-'   o thisComment       - Current RTAs comments
-'   o thisAssignedto    - Current RTAs assigned to
-'   o thisDept          - Current RTAs current status
-'   o thisTRDD          - Current RTAs revised due date
-'   o thisLabOffice     - Current RTAs lab office
-'   o thisType          - Current RTAs type
-'   o thisCode          - Current RTAs code
-'   o thisRequestor     - Current RTAs requestor name
-'   o thisRequestorEmail- Current requestor's email
-'   o thisSUbmitter     - Current RTAs submittrer name
-'   o thisState         - Current RTAs state
-' ===================================================================================================
+''' ===================================================================================================
+''' I N I T I AL I Z E   T H E   P E R - R T A   V A R I A B L E S
+''' ---------------------------------------------------------------------------------------------------
+'''   o thisRow           - Current row number
+'''   o thisRTA           - Current RTA number
+'''   o thisRTAlong       - RTA number in R00000XXXXXX format
+'''   o thisClass         - Current RTAs class
+'''   o thisClassLong     - Full class name as in CWI
+'''   o thisDescription   - Current RTAs description
+'''   o thisComment       - Current RTAs comments
+'''   o thisAssignedto    - Current RTAs assigned to
+'''   o thisDept          - Current RTAs current status
+'''   o thisTRDD          - Current RTAs revised due date
+'''   o thisLabOffice     - Current RTAs lab office
+'''   o thisType          - Current RTAs type
+'''   o thisCode          - Current RTAs code
+'''   o thisRequestor     - Current RTAs requestor name
+'''   o thisRequestorEmail- Current requestor'''s email
+'''   o thisSUbmitter     - Current RTAs submittrer name
+'''   o thisState         - Current RTAs state
+''' ===================================================================================================
 Public Sub getCurrent()
     
     thisRow = ActiveCell.Row
@@ -186,7 +226,7 @@ Public Sub getCurrent()
     thisType = Cells(thisRow, getCol("type"))
     thisCode = Cells(thisRow, getCol("code"))
     thisRequestor = Cells(thisRow, getCol("requestor name"))
-    thisequestorEmail = Cells(thisRow, getCol("requestor email"))
+    thisRequestorEmail = Cells(thisRow, getCol("requestor email"))
     thisSubmitter = Cells(thisRow, getCol("requestor name"))
     thisState = Cells(thisRow, getCol("state"))
     

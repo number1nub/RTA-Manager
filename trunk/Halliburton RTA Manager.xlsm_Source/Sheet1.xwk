@@ -100,7 +100,7 @@ Attribute VB_Exposed = True
             Application.DisplayFullScreen = False
             Application.Range("fullScreenMode") = False
         End If
-        Call CMDline_Func("/popUp", "", "Full-Screen mode: " & fsMode, 2)
+        Call CMDline("/popUp", "", "Full-Screen mode: " & fsMode, 2)
     End Sub
 
 
@@ -142,7 +142,7 @@ Attribute VB_Exposed = True
         
         ' Check that RTA Sheet Tools.exe is found; else prompt and abort
         '=====================================================================
-        If Dir(myPath & "\Include\RTA Sheet Tools.exe") = "" Then
+        If Dir(SheetToolsPath) = "" Then
             Call MsgBox("The file ""RTA Sheet Tools.exe"" could not be found." & vbCrLf & "" & vbCrLf & _
                 "Re-running the setup/installer may help resolve this issue...", vbExclamation, "Missing File!")
             Exit Sub
@@ -182,7 +182,7 @@ Attribute VB_Exposed = True
         ' Launch RTA Sheet Tools.exe
         '============================
         paramList = """" & headers & """" & " """ & viscols & """"
-        Call Shell("""" & myPath & "\Include\RTA Sheet Tools.exe"" " & paramList, vbNormalFocus)
+        Call Shell("""" & SheetToolsPath & """ " & paramList, vbNormalFocus)
     End Sub
 
 
@@ -337,7 +337,12 @@ Attribute VB_Exposed = True
 '***************************************************************************************************
     Private Sub clearSort_Click()
     
-'        Call CMDline_Func("/splash", "Removing filters and building table" & vbNewLine & "Please wait....")
+        '___________________________
+        '   SHOW THE LOAD SPLASH
+        '
+        Call splash("Removing filters and building table" & vbNewLine & "Please wait....")
+        
+    
     
         '===================================================
         '   Show in full screen if enabled
@@ -462,18 +467,18 @@ Attribute VB_Exposed = True
                 ' Call load file helper function in CMDline_Functions.exe
                 ' (will open CWI and copy rtaLoad.xlsx full path to clipboard)
                 '=================================================================
-                If Dir(myPath & "\Include\CMDline_Functions.exe") = "" Then
+                If Dir(CMDlinePath) = "" Then
                             
                     ' CMDline_Functions.exe not found... prompt user and finish
                     MsgBox ("A file named rtaload.xlsx has been saved into your My Documents folder." & vbNewLine & "Choose modify objects from excel in CWI and load this file." _
                         & vbNewLine & "NOTE: There is an automatic loader app that will do this for you which was not found on your machine.")
                 Else
-                    Call CMDline_Func("/load")
+                    Call CMDline("/load")
                     
                     'Display pop-up notification
-                    Call CMDline_Func("/popup", vbNewLine & "Load to CWI by selecting 'Modify Objects from Excel'" & _
+                    Call CMDline("/popup", vbNewLine & "Load to CWI by selecting 'Modify Objects from Excel'" & _
                         vbNewLine & "from the 'Objects' menu." & vbNewLine, " rtaLoad.xlsx was saved in" & _
-                        vbNewLine & " your My Documents folder...", "4.5")
+                        vbNewLine & " your My Documents folder...", "4")
                 End If
             End If
         End If
@@ -485,7 +490,11 @@ Attribute VB_Exposed = True
         sortField (" ")
         ActiveSheet.Range("a1").Select
         
-'        Call MsgBox("Done", , "RTA Manager - Splash Off")
+        '___________________________
+        '  TURN OFF THE SPLASH
+        '
+        splash
+        
         
         Application.ScreenUpdating = True
     End Sub
