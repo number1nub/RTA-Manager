@@ -13,7 +13,7 @@ Attribute VB_Name = "CMD_Line"
 
 ' ___________________________________________________________________________________________________
 ' ===================================================================================================
-' Sub: CMDline_Func
+' Sub: CMDline
 '
 '   General function used to simplify shell calls to CMDline_Functions.exe.
 '   Basically calls the program and passes each parameter that it receives as a parameter
@@ -30,7 +30,7 @@ Attribute VB_Name = "CMD_Line"
 ' Last Modified: 2012-01-16
 ' ___________________________________________________________________________________________________
 ' ===================================================================================================
-Function CMDline_Func(cmdSwitch As String, Optional param2 = "", Optional param3 As String = "", Optional param4 = "", Optional param5 = "")
+Function CMDline(cmdSwitch As String, Optional param2 = "", Optional param3 As String = "", Optional param4 = "", Optional param5 = "")
     
     '________________________________________
     '       INITIALIZE GLOBALS IF NOT ALREADY
@@ -45,12 +45,27 @@ Function CMDline_Func(cmdSwitch As String, Optional param2 = "", Optional param3
     '_________________________________
     '       CALL CMDLINE_FUNCTIONS.EXE
     '
-    CMDline_Func = Shell("""" & myPath & "\Include\CMDline_Functions.exe"" " & paramList, vbNormalFocus)
+    CMDline = Shell("""" & CMDlinePath & """ " & paramList, vbNormalFocus)
 End Function
   
   
   
-  
+
+
+' ___________________________________________________________________________________________________
+' ===================================================================================================
+' Sub: splash
+'
+'   Show a splash screen in the center of the monitor (the monitor w/Excel in it, if there are
+'   multiple) with the given text displayed.
+'
+'   The splash screen will stay active and on top of all other windows until Splash is called again
+'   without parameters, causing it to destroy.
+'
+' Last Modified:
+'       2012-02-04
+' ___________________________________________________________________________________________________
+' ===================================================================================================
 Sub splash(Optional sTxt As String = "")
 
     '______________________
@@ -63,7 +78,7 @@ Sub splash(Optional sTxt As String = "")
     '___________
     '       SHOW
     '
-    Call CMDline_Func("/splash", sTxt)
+    Call CMDline("/splash", sTxt)
      
 End Sub
 

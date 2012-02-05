@@ -20,12 +20,20 @@ Attribute VB_Exposed = True
 Private Sub CommandButton1_Click()
     On Error Resume Next
     
+      
+    '__________________________________
+    '  SHOW SPLASH IMAGE WHILE LOADING
+    '
+    splash ("On")
     
+    
+        
     '_____________________________________________________
     '       ASSIGN VALUES TO THE USER-SPECIFIC GLOBAL VARS
     '
     initGlobals
-    
+       
+  
 
     
     '===============================================================
@@ -43,7 +51,7 @@ Private Sub CommandButton1_Click()
     '   ENSURE THAT CMDline_Functions.exe IS FOUND -- ELSE
     '   PROMPT TO FIX & QUIT
     '======================================================================
-        If Dir(myPath & "\Include\CMDline_Functions.exe") = "" Then
+        If Dir(CMDlinePath) = "" Then
             Call MsgBox("Uh oh... An important file couldn't be found:" & vbNewLine & vbNewLine & _
             "                                 CMDline_Functions.exe" & vbNewLine & vbNewLine & _
             "Without it, this sheet cannot fully function. Please re-run the installer to fix this issue." _
@@ -59,7 +67,7 @@ Private Sub CommandButton1_Click()
     '=================================================================
     ' Check for valid screen resolution using CMDline_Functions.exe
     '=================================================================
-        Call CMDline_Func("/checkRes", 180000, vbNormalNoFocus, IgnoreBreak)
+        Call CMDline("/checkRes", 180000, vbNormalNoFocus, IgnoreBreak)
         
         '______________________
         '   SHOW IN FULL SCREEN
@@ -76,6 +84,12 @@ Private Sub CommandButton1_Click()
             Sheet1.Visible = xlSheetVisible
             Sheet1.Activate
             Sheet7.Visible = xlSheetHidden
+            
+        '_______________
+        'Splash off
+        '
+        splash
+
 End Sub
 
 

@@ -13,6 +13,20 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+' ___________________________________________________________________________________________________
+' ***************************************************************************************************
+' Form: protect
+'
+'   -
+'
+' About:
+'   o Written by:    Rameen Bakhtiary
+'   o Last Modified: 2012-02-04
+' ___________________________________________________________________________________________________
+' ***************************************************************************************************
+
+
+
 Sub CommandButton2_Click()
     OK = False: Unload Me
 End Sub

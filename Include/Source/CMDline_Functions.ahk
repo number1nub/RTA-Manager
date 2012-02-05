@@ -6,24 +6,23 @@ Exe_File=C:\Dropbox\Halliburton RTA Manager\Include\CMDline_Functions.exe
 Created_Date=1
 Execution_Level=2
 [VERSION]
-Resource_Files=C:\Dropbox\Halliburton RTA Manager\Resource\Halliburton RTA Manager.ico
+Resource_Files=C:\Dropbox\Halliburton RTA Manager\Resource\Halliburton RTA Manager.ico|C:\Dropbox\Halliburton RTA Manager\Resource\tools.ico
 Set_Version_Info=1
 Company_Name=Halliburton - WellDynamics
 File_Description=Functions, macros & scripts accessible via CMD line parameters. Supplements (and is required in order to run) the RTA Management Sheet.
-File_Version=2.0.0.44
-Inc_File_Version=1
+File_Version=2.1.0.50
+Inc_File_Version=0
 Internal_Name=CMDline_Functions
 Legal_Copyright=Rameen Bakhtiary - Halliburton|WellDynamics
 Original_Filename=CMDline_Functions
 Product_Name=Source - AutoHotkey_L
-Product_Version=1.1.5.3
+Product_Version=1.1.5.6
 Set_AHK_Version=1
 [ICONS]
-Icon_1=C:\Dropbox\Halliburton RTA Manager\Resource\Halliburton RTA Manager.ico
+Icon_1=C:\Dropbox\Halliburton RTA Manager\Resource\tools.ico
 
 * * * Compile_AHK SETTINGS END * * *
 */
-
 
 ;___________________________________________________________________________________________________
 ;***************************************************************************************************
@@ -197,28 +196,55 @@ ExitApp
 
 
 
+;=================================================================
+;               SLIDE-IN FROM LEFT / SLIDE-OUT TO RIGHT
+;=================================================================
+Splash:
+    IfWinNotExist, ahk_class XLMAIN
+        ExitApp
+    
+    splashWidth := 538
+    
+    WinGetPos, wx, wy, ww,,ahk_class XLMAIN
+    
+    splashX := Round(wx + ((ww/2) - (splashWidth/2)))
+
+	
+    SplashImage, %A_ScriptDir%\..\Resource\Splash.png, CWwhite Zy0 zx0 x%SplashX% w%splashWidth% B1 FS16 WS600,,,RTA Management Splash
+
+    
+    winwait, RTA Manager - Splash Off    
+    
+    WinClose, RTA Manager - Splash Off    
+    SplashImage, off
+ExitApp
+
+
+
+
+
 
 ;===================================================
 ;           Splash Image
 ;===================================================
-splash:
-    if !p2
-        ExitApp
+;~ splash:
+    ;~ if !p2
+        ;~ ExitApp
     
-    splashWidth := 700
+    ;~ splashWidth := 700
     
-    WinGetPos, wx, wy, ww,,ahk_class XLMAIN
+    ;~ WinGetPos, wx, wy, ww,,ahk_class XLMAIN
     
-    splashX := wx + ((ww/2) - (splashWidth/2))
+    ;~ splashX := wx + ((ww/2) - (splashWidth/2))
     
-    SplashImage, C:\Dropbox\Halliburton RTA Manager\Resource\RTA Report Header.png, CWwhite Zy0 zx0 x%SplashX% y175 w%splashWidth% h235 B1 FS16 WS600, %p2%,,, Arial
+    ;~ SplashImage, %A_ScriptDir%\..\Resource\RTA Report Header.png, CWwhite Zy0 zx0 x%SplashX% y175 w%splashWidth% h235 B1 FS16 WS600, %p2%,,, Arial
     
-    ;~ SplashImage, C:\Dropbox\Halliburton RTA Manager\Resource\RTA Manager Logo.png, CWwhite Zy0 zx0 y100 w250 B1 FS12 WS550, %p2%,,, Calibri
-    WinWait, - Splash Off
-    WinClose, RTA Manager - Splash Off
-    SplashImage, Off
-ExitApp
-
+    ;~ ;SplashImage, C:\Dropbox\Halliburton RTA Manager\Resource\RTA Manager Logo.png, CWwhite Zy0 zx0 y100 w250 B1 FS12 WS550, %p2%,,, Calibri
+    
+    ;~ WinWait, - Splash Off
+    ;~ WinClose, RTA Manager - Splash Off
+    ;~ SplashImage, Off
+;~ ExitApp
 
 
 

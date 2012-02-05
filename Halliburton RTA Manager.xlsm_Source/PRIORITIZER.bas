@@ -202,11 +202,12 @@ Sub prioritize_ReOrder()
 
     'Display a notification of completion
     '=====================================
-    Call CMDline_Func("/popup", "          Load  'My Documents\rtaLoad.xlsx'  into CWI to apply the changes" & vbNewLine & vbNewLine, "          Prioritization complete....")
+    Call CMDline("/popup", "          Load  'My Documents\rtaLoad.xlsx'  into CWI to apply the changes" & _
+                        vbNewLine & vbNewLine, "          Prioritization complete....")
     
     'Open a CWI page
     '=================
-    Call CMDline_Func("/Load", vbNormalFocus)
+    Call CMDline("/Load", vbNormalFocus)
             
     Application.ScreenUpdating = True
 End Sub
