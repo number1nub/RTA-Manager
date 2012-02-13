@@ -8,13 +8,14 @@
     <ROW Property="ARPNOMODIFY" MultiBuildValue="DefaultBuild:1"/>
     <ROW Property="ARPPRODUCTICON" Value="Halliburton_RTA_Manager_1.exe" Type="8"/>
     <ROW Property="ARPURLINFOABOUT" Value="http://sphoumysite/personal/hb52875/apps/rta-manager"/>
+    <ROW Property="ARPURLUPDATEINFO" Value="http://sphoumysite/personal/hb52875/apps/rta-manager/update.txt"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:7"/>
     <ROW Property="Manufacturer" Value="Halliburton - WellDynamics" ValueLocId="*"/>
-    <ROW Property="ProductCode" Value="1033:{EDC506A5-8E4E-4B86-84FB-8E53B9735497} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{B735D304-9B09-4731-AC43-A17CF6AF594A} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Halliburton RTA Manager" ValueLocId="*"/>
-    <ROW Property="ProductVersion" Value="4.2.0.1"/>
+    <ROW Property="ProductVersion" Value="4.2.1.1"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{19151B34-818D-49A2-B327-CC65233BCBF8}"/>
@@ -50,8 +51,9 @@
     <ROW File="RTAManagerHeader.png" Component_="RTAManagerLogo.png" FileName="RTAMan~2.png|RTA Manager Header.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Resource\RTA Manager Header.png" SelfReg="false" NextFile="RTAReportHeader.png"/>
     <ROW File="RTAManagerLogo.png" Component_="RTAManagerLogo.png" FileName="RTAMan~1.png|RTA Manager Logo.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Resource\RTA Manager Logo.png" SelfReg="false" NextFile="RTAManagerHeader.png"/>
     <ROW File="RTAReportHeader.png" Component_="RTAManagerLogo.png" FileName="RTARep~1.png|RTA Report Header.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Resource\RTA Report Header.png" SelfReg="false" NextFile="RTASheetToolsHeader.png"/>
-    <ROW File="RTASheetTools.exe" Component_="RTASheetTools.exe" FileName="RTAShe~1.exe|RTA Sheet Tools.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Include\RTA Sheet Tools.exe" SelfReg="false"/>
+    <ROW File="RTASheetTools.exe" Component_="RTASheetTools.exe" FileName="RTAShe~1.exe|RTA Sheet Tools.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Include\RTA Sheet Tools.exe" SelfReg="false" NextFile="Splash.png"/>
     <ROW File="RTASheetToolsHeader.png" Component_="RTAManagerLogo.png" FileName="RTAShe~1.png|RTA Sheet Tools Header.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Resource\RTA Sheet Tools Header.png" SelfReg="false" NextFile="HalliburtonRTAManager.ico"/>
+    <ROW File="Splash.png" Component_="RTAManagerLogo.png" FileName="Splash.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Resource\Splash.png" SelfReg="false"/>
     <ROW File="tools.ico" Component_="RTAManagerLogo.png" FileName="tools.ico" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Resource\tools.ico" SelfReg="false" NextFile="HalliburtonRTAManager.png"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BuildComponent">
