@@ -92,8 +92,6 @@ Icon_1=C:\Dropbox\Halliburton RTA Manager\Resource\tools.ico
 
 
 
-
-
   
 ;===================================================
 ;       Tray Icon from compiled resources
@@ -145,6 +143,8 @@ ExitApp
 
 
 
+
+
 ;==================================================
 ;                 /LOAD - Load rtaLoad.xlsx to CWI
 ;==================================================
@@ -163,6 +163,8 @@ load:
     sleep 50
     ;==== Quit ==============
 ExitApp
+
+
 
 
 
@@ -200,9 +202,7 @@ ExitApp
 ;               SLIDE-IN FROM LEFT / SLIDE-OUT TO RIGHT
 ;=================================================================
 Splash:
-    IfWinNotExist, ahk_class XLMAIN
-        ExitApp
-    
+
     splashWidth := 538
     
     WinGetPos, wx, wy, ww,,ahk_class XLMAIN
@@ -212,8 +212,8 @@ Splash:
 	
     SplashImage, %A_ScriptDir%\..\Resource\Splash.png, CWwhite Zy0 zx0 x%SplashX% w%splashWidth% B1 FS16 WS600,,,RTA Management Splash
 
-    
-    winwait, RTA Manager - Splash Off    
+ 
+ winwait, - Splash Off    
     
     WinClose, RTA Manager - Splash Off    
     SplashImage, off
@@ -227,25 +227,23 @@ ExitApp
 ;===================================================
 ;           Splash Image
 ;===================================================
-;~ splash:
-    ;~ if !p2
-        ;~ ExitApp
-    
-    ;~ splashWidth := 700
-    
-    ;~ WinGetPos, wx, wy, ww,,ahk_class XLMAIN
-    
-    ;~ splashX := wx + ((ww/2) - (splashWidth/2))
-    
-    ;~ SplashImage, %A_ScriptDir%\..\Resource\RTA Report Header.png, CWwhite Zy0 zx0 x%SplashX% y175 w%splashWidth% h235 B1 FS16 WS600, %p2%,,, Arial
-    
-    ;~ ;SplashImage, C:\Dropbox\Halliburton RTA Manager\Resource\RTA Manager Logo.png, CWwhite Zy0 zx0 y100 w250 B1 FS12 WS550, %p2%,,, Calibri
-    
-    ;~ WinWait, - Splash Off
-    ;~ WinClose, RTA Manager - Splash Off
-    ;~ SplashImage, Off
-;~ ExitApp
+;~ FadeIn:
+	;~ gui, 3:Destroy
+	;~ IfNotExist, asplash1.gif
+	 ;~ URLDownloadToFile
+	 ;~ , asplash1.gif
+	 ;~ , asplash1.gif
 
+	;~ Gui, Margin, 0,0
+	;~ Gui +LastFound
+	;~ GUI_ID:=WinExist()
+	;~ Gui, -Caption +AlwaysOnTop +Border
+	;~ Gui, Add, Picture, , asplash1.gif
+	;~ Gui,Show, AutoSize Hide, Animated Splash Window - Demo
+	;~ DllCall("AnimateWindow",UInt,GUI_ID,UInt,3000,UInt,0xa0000)
+	;~ Sleep 3000
+	;~ DllCall("AnimateWindow",UInt,GUI_ID,UInt,1500,UInt,0x90000) 
+;~ ExitApp
 
 
 

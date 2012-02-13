@@ -176,7 +176,9 @@ Icon_1=%In_Dir%\RTA Sheet Update.ahk_1.ico
 	;		file is found.
 	;
 	Loop, A_ScriptDir betaInstaller_Dir "\*"
-		If RegExMatch(A_LoopFileName, BetaInstaller_RegEx, installer){
+		
+		If RegExMatch(A_LoopFileName, BetaInstaller_RegEx, installer)
+		{
 			
 			;__________________________________________
 			;*** Installer found; No updates needed ***
