@@ -5,7 +5,7 @@ SetWorkingDir % A_ScriptDir
 
 
 VersionFileRegEx := "i)[Version|Build][_|\s]?(?P<num>\d\.\d\.\d(\.\d)?)"
-
+7z = Build\7z\7z.exe
 
 ;_____________________
 ; Get the build number
@@ -95,7 +95,7 @@ sleep 50
 ;_______________
 ; Compress files
 ;
-RunWait, 7z.exe a `"%outFile%`" %tempDir%\*, Hide
+RunWait, %7z% a `"%outFile%`" %tempDir%\*, Hide
 sleep 100
 
 
