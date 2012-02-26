@@ -12,10 +12,10 @@
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:7"/>
     <ROW Property="Manufacturer" Value="Halliburton - WellDynamics" ValueLocId="*"/>
-    <ROW Property="ProductCode" Value="1033:{B735D304-9B09-4731-AC43-A17CF6AF594A} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{5C02EB23-8F7B-41E3-8482-C9BDD333C53E} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Halliburton RTA Manager" ValueLocId="*"/>
-    <ROW Property="ProductVersion" Value="4.2.1.2"/>
+    <ROW Property="ProductVersion" Value="4.2.2"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{19151B34-818D-49A2-B327-CC65233BCBF8}"/>
