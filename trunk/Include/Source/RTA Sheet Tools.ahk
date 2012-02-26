@@ -2,23 +2,23 @@
  * * * Compile_AHK SETTINGS BEGIN * * *
 
 [AHK2EXE]
-Exe_File=C:\Dropbox\Halliburton RTA Manager\Include\RTA Sheet Tools.exe
+Exe_File=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Include\RTA Sheet Tools.exe
 Created_Date=1
 Execution_Level=2
 [VERSION]
-Resource_Files=C:\Dropbox\Halliburton RTA Manager\Resource\tools.ico
+Resource_Files=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Resource\tools.ico
 Set_Version_Info=1
 Company_Name=Halliburton - WellDynamics
 File_Description=GUI application with convinient sheet tools for RTA Management Sheet
-File_Version=1.0.0.67
+File_Version=1.0.0.69
 Inc_File_Version=1
 Internal_Name=RTA Sheet Tools
 Original_Filename=RTA Sheet Tools
 Product_Name=Source: AutoHotkey_L
-Product_Version=1.1.5.3
+Product_Version=1.1.5.6
 Set_AHK_Version=1
 [ICONS]
-Icon_1=C:\Dropbox\Halliburton RTA Manager\Resource\tools.ico
+Icon_1=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Resource\tools.ico
 
 * * * Compile_AHK SETTINGS END * * *
 */
@@ -169,21 +169,17 @@ gui, Margin, 0, 10
 Gui, add, Picture, y0 gTitleEvent section, %InstallDir%\Resource\RTA Sheet Tools Header.png
 
 
-
-
 ;--- Listview ---
 gui, Font, cwhite
 Gui, Add, ListView, x15 y+15 w230 BackgroundE0E0E0 r%RowCount% Checked AltSubmit vMyListView gMyListView Grid -Hdr NoSort Section, |Column Header
-
-
-
-BUTTON_OPTS = W50 H30
 
 
 ;--- AIS & LT's GroupBox ---
 Gui, font, s10 w700 c737373
 Gui, Add, GroupBox, x+30 ys-5 w115 h60 center Section, AIS && LT's
 Gui, font, s10 w500
+
+BUTTON_OPTS = W50 H30
 Gui, Add, Button, xp+6 ys+20 %BUTTON_OPTS% gtoggleAIS, Show
 Gui, Add, Button, x+2 yp %BUTTON_OPTS% gtoggleAIS, Hide
 
@@ -202,12 +198,18 @@ Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vrtaDatesHide, RTA Dates
 Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vshowAll, Show All
 
 
-
 gui, Add, Text, ys+140,
 
 gosub, getColumnInfo
 
-Gui, Show,, RTA Sheet Tools
+
+;______________________________________________
+; 	GET POSITION OF EXCEL WINDOW AND CENTER GUI
+;
+GuiWidth := 325
+WinGetPos, wx, wy, ww,,ahk_class XLMAIN    
+guiX := Round(wx + ((ww/2) - (GuiWidth/2)))
+Gui, Show, x%GuiX%, RTA Sheet Tools
 
 ;Make sure list view can receive color changes
 LVA_ListViewAdd("MyListView")

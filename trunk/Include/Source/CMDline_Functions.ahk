@@ -2,11 +2,11 @@
  * * * Compile_AHK SETTINGS BEGIN * * *
 
 [AHK2EXE]
-Exe_File=C:\Dropbox\Halliburton RTA Manager\Include\CMDline_Functions.exe
+Exe_File=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Include\CMDline_Functions.exe
 Created_Date=1
 Execution_Level=2
 [VERSION]
-Resource_Files=C:\Dropbox\Halliburton RTA Manager\Resource\Halliburton RTA Manager.ico|C:\Dropbox\Halliburton RTA Manager\Resource\tools.ico
+Resource_Files=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Resource\tools.ico
 Set_Version_Info=1
 Company_Name=Halliburton - WellDynamics
 File_Description=Functions, macros & scripts accessible via CMD line parameters. Supplements (and is required in order to run) the RTA Management Sheet.
@@ -19,7 +19,7 @@ Product_Name=Source - AutoHotkey_L
 Product_Version=1.1.5.6
 Set_AHK_Version=1
 [ICONS]
-Icon_1=C:\Dropbox\Halliburton RTA Manager\Resource\tools.ico
+Icon_1=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Resource\tools.ico
 
 * * * Compile_AHK SETTINGS END * * *
 */
@@ -202,13 +202,12 @@ ExitApp
 ;               SLIDE-IN FROM LEFT / SLIDE-OUT TO RIGHT
 ;=================================================================
 Splash:
-
+    ;___________________________________________________
+    ; 	GET COORDINATES TO CENTER SPLASH IN EXCEL WINDOW
+    ;
     splashWidth := 538
-    
-    WinGetPos, wx, wy, ww,,ahk_class XLMAIN
-    
+    WinGetPos, wx, wy, ww,,ahk_class XLMAIN    
     splashX := Round(wx + ((ww/2) - (splashWidth/2)))
-
 	
     SplashImage, %A_ScriptDir%\..\Resource\Splash.png, CWwhite Zy0 zx0 x%SplashX% w%splashWidth% B1 FS16 WS600,,,RTA Management Splash
 
