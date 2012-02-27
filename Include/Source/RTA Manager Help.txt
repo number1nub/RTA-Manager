@@ -1,0 +1,43 @@
+Title: Halliburton RTA Manager Help, Tips & Tricks
+
+
+Group: Change Log
+
+Build 4.2.2:
+	
+	o 
+	
+  o Sheet view mode tool allows switching between multiple preset table views & quick show/hide of individual columns
+  
+  o Open RTAs in CWI in your choice of multiple CWI views (i.e.- Navigate, Print, Create/Modify, Structure Mod/View, etc..)
+  o Weekly meeting comments button inserts blank line and "yyyy-MM-dd, WM: " at bottom of description. (Edit mode only)
+  o Email RTA submitter/requestor directly from RTA Details GUI
+  
+  
+
+
+
+*HAVING PROBLEMS WITH LARGE AND/OR GROWING BUTTONS/CONTROLS?
+*IS TEXT ON BUTTONS/WINDOWS GETTING CUT OFF OR EXPANDING PAST THE BUTTON ITSELF?
+ 
+	Try this: 
+		- (Windows 7) Right click desktop & choose 'Personalize'. 
+		- Select 'Display' under the 'see also' section (bottom left)
+		- In 'Set custom text size (DPI)' make sure that your DPI is set to 100%.
+		  if not, change the setting, & click apply (you must log off & back on for
+		  settings to take affect)
+
+*Never change monitors or change resolution while the sheet is open!
+	- If you are connecting to a different monitor, projector, etc., close
+	  the sheet, connect the monitor, then re-open it.
+	
+	- If you are using the sheet and want to change the monitor's resolution, close
+	  the sheet, change resolution, and re-open it.
+	  
+	  **TIP: To permanently set these permissions:		
+	-   From the main Excel menu, go to Excel Options	
+	-   In the 'Trust Center' tab click 'Trust Center Settings'	
+	-   In 'Macro Settings' choose 'Enable all macros' and	
+	     in 'External Connections' choose 'Enable all Data Connections'	
+
+
