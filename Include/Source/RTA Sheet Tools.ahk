@@ -10,7 +10,7 @@ Resource_Files=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Resource\tools.ico
 Set_Version_Info=1
 Company_Name=Halliburton - WellDynamics
 File_Description=GUI application with convinient sheet tools for RTA Management Sheet
-File_Version=1.0.0.69
+File_Version=1.0.0.70
 Inc_File_Version=1
 Internal_Name=RTA Sheet Tools
 Original_Filename=RTA Sheet Tools
@@ -186,7 +186,7 @@ Gui, Add, Button, x+2 yp %BUTTON_OPTS% gtoggleAIS, Hide
 
 ;--- PRESET Views GroupBox ---
 gui, Font, w700
-Gui, Add, GroupBox, xs-4 y+20 w125 h200 center Section, Preset Views
+Gui, Add, GroupBox, xs-4 y+20 w125 h230 center Section, Preset Views
 Gui, font, s10 w500
 
 BUTTON_OPTS = w110 H30
@@ -194,6 +194,7 @@ BUTTON_OPTS = w110 H30
 Gui, Add, Button,  xs+7 ys+23 %BUTTON_OPTS% gpresetViews vpmtHide, PMT Mode
 Gui, Add, Button,  xp y+5 %BUTTON_OPTS% gpresetViews vdeptHide, Edit Mode
 Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vtrackRtaHide, RTA Tracking
+Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vtrackTSGhide, TSG Mode
 Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vrtaDatesHide, RTA Dates
 Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vshowAll, Show All
 
