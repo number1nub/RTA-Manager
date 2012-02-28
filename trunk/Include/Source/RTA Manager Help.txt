@@ -1,9 +1,16 @@
-Title: Halliburton RTA Manager Help, Tips & Tricks
+Title: Halliburton RTA Manager Quick Guide
+	
+	Halliburton RTA Manager is a revision controlled document, available
+	for download through either the CWI interface, or via a Halliburton
+	published document link.
+	
+	*Get the latest CWI release 
 
 
 Group: Change Log
-
-Build 4.2.2:
+	List of notable changes from previous release
+	
+	Release Revision C
 	
 	o 
 	
