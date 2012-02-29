@@ -80,16 +80,21 @@ Icon_1=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Resource\tools.ico
  DetectHiddenWindows, on
  DetectHiddenText, on
  CoordMode, mouse, relative
- Dir := Replace(RegRead("HKCU", "Software\Halliburton RTA Manager", "InstallDir"), """", "", "All")
- if !(Dir)     ;Error with reg entry. Set working dir to parent dir of this script
-	Dir = %a_scriptdir%\..
- SetWorkingDir, %Dir%
+ SetWorkingDir, %A_ScriptDir%
  SetTitleMatchMode, 2
- SetKeyDelay, -1
  SetBatchLines, -1
 ;___________________________________________________________________________________________________
 ;***************************************************************************************************
 
+
+
+
+;===================================================
+;         GET SHEET INSTALL PATH
+;===================================================
+try RegRead, installDir, HKCU, Software\Halliburton RTA Manager, InstallDir
+catch
+    installDir := A_MyDocuments\Halliburton RTA Manager
 
 
   
@@ -98,7 +103,8 @@ Icon_1=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Resource\tools.ico
 ;===================================================
 If A_IsCompiled
     menu, tray, icon, % A_ScriptFullPath, -159
-    
+
+
     
 
 ;==================================================
@@ -120,25 +126,27 @@ ExitApp
 
 
 
-;==================================================
+
+
+;=====================================================
 ;       /checkRes - Check screen resolution & Version
-;==================================================
+;=====================================================
 checkRes:
-    xl_Mon := WinGetMon(WinExist("ahk_class XLMAIN"))
-    SysGet, xl_Coord, Monitor, %xl_Mon%
-    SysGet, mainMon, Monitor, 1
-    xRes := (xl_Mon > 1) ? (xl_CoordRight - mainMonRight) : xl_CoordRight
-    yRes := xl_CoordBottom
-    if ((xRes< 1280) || (yRes<1024)){       ;Resolution too low - prompt to change
-        MsgBox, 4148, Halliburton Management Sheet, 
-        (LTrim
-        Your screen resolution is currently lower than what this sheet was designed to run on`n
-        It is highly recommended that you change your resolution to at least 1280 x 1024 in order to avoid problems in performance.`n
-        Open screen settings now? Press No to continue without changing (NOT RECOMMENDED)
-        )
-        IfMsgBox, yes
-            RunWait, control desk.cpl`,`,3        
-    }
+    ;~ xl_Mon := WinGetMon(WinExist("ahk_class XLMAIN"))
+    ;~ SysGet, xl_Coord, Monitor, %xl_Mon%
+    ;~ SysGet, mainMon, Monitor, 1
+    ;~ xRes := (xl_Mon > 1) ? (xl_CoordRight - mainMonRight) : xl_CoordRight
+    ;~ yRes := xl_CoordBottom
+    ;~ if ((xRes< 1280) || (yRes<1024)){       ;Resolution too low - prompt to change
+        ;~ MsgBox, 4148, Halliburton Management Sheet, 
+        ;~ (LTrim
+        ;~ Your screen resolution is currently lower than what this sheet was designed to run on`n
+        ;~ It is highly recommended that you change your resolution to at least 1280 x 1024 in order to avoid problems in performance.`n
+        ;~ Open screen settings now? Press No to continue without changing (NOT RECOMMENDED)
+        ;~ )
+        ;~ IfMsgBox, yes
+            ;~ RunWait, control desk.cpl`,`,3        
+    ;~ }
 ExitApp
 
 
@@ -161,7 +169,6 @@ load:
     sleep, 880
     winactivate, Advanced Lookup -        
     sleep 50
-    ;==== Quit ==============
 ExitApp
 
 
@@ -172,7 +179,6 @@ ExitApp
 ;    POP UP - Display notify & show params
 ;'==================================================
 popup:
-test:
 	title := p1 = "test" ? "CMDline_Functions Debugging..." : p3 ? p3 : "`t`t"
 	defaultTime := p4 ? p4 = "f" ? 0 : -p4 : -4.5
 	bgOpts := "gc=white gt=off "
@@ -187,62 +193,54 @@ test:
         sleep 10000
         ExitApp
     }
-return
-clickPopup: ;Pop-up clicked before it timed out
-	if p5
-        run, % p5
-ExitApp
-
-
+return    
+    ;==================================
+    ;  Action to take on pop-up click
+    ;==================================
+    clickPopup:
+        if p5
+            run, % p5
+    ExitApp
 
 
 
 
 ;=================================================================
-;               SLIDE-IN FROM LEFT / SLIDE-OUT TO RIGHT
+;            DISPLAY A 'PLEASE WAIT' SPLASH 
 ;=================================================================
 Splash:
-    ;___________________________________________________
-    ; 	GET COORDINATES TO CENTER SPLASH IN EXCEL WINDOW
+    ;___________________________________
+    ; 	Get coordinates to center splash
+    ;   in excel window
     ;
-    splashWidth := 538
-    WinGetPos, wx, wy, ww,,ahk_class XLMAIN    
-    splashX := Round(wx + ((ww/2) - (splashWidth/2)))
+        splashWidth := 538
+        WinGetPos, wx, wy, ww,,ahk_class XLMAIN    
+        splashX := Round(wx + ((ww/2) - (splashWidth/2)))
 	
-    SplashImage, %A_ScriptDir%\..\Resource\Splash.png, CWwhite Zy0 zx0 x%SplashX% w%splashWidth% B1 FS16 WS600,,,RTA Management Splash
-
- 
- winwait, - Splash Off    
     
-    WinClose, RTA Manager - Splash Off    
-    SplashImage, off
+    ;___________________________________
+    ;   Set a backup time to destroy the
+    ;   splash incase something happens
+    ;   
+        SetTimer, splashTimeout, 10000
+        
+    ;______________
+    ; 	Show splash
+    ;
+        SplashImage, %A_ScriptDir%\..\Resource\Splash.png, CWwhite Zy0 zx0 x%SplashX% w%splashWidth% B1 FS16 WS600,,,RTA Management Splash
+
+    ;______________________________________
+    ; 	Wait for window popup from excel to
+    ;   destroy splash, or until time out
+    ;
+        winwait, - Splash Off      
+    
+    splashTimeout:
+        WinClose, RTA Manager - Splash Off    
+        SplashImage, off   
 ExitApp
 
 
-
-
-
-
-;===================================================
-;           Splash Image
-;===================================================
-;~ FadeIn:
-	;~ gui, 3:Destroy
-	;~ IfNotExist, asplash1.gif
-	 ;~ URLDownloadToFile
-	 ;~ , asplash1.gif
-	 ;~ , asplash1.gif
-
-	;~ Gui, Margin, 0,0
-	;~ Gui +LastFound
-	;~ GUI_ID:=WinExist()
-	;~ Gui, -Caption +AlwaysOnTop +Border
-	;~ Gui, Add, Picture, , asplash1.gif
-	;~ Gui,Show, AutoSize Hide, Animated Splash Window - Demo
-	;~ DllCall("AnimateWindow",UInt,GUI_ID,UInt,3000,UInt,0xa0000)
-	;~ Sleep 3000
-	;~ DllCall("AnimateWindow",UInt,GUI_ID,UInt,1500,UInt,0x90000) 
-;~ ExitApp
 
 
 
@@ -256,9 +254,11 @@ ExitApp
 
 
 
-;==================================================
-;         SEARCH CWI - Open RTA page from INI File
-;==================================================
+
+
+;===================================================================================================
+;   O P E N    R T A    I N    C W I  
+;===================================================================================================
 rtaSearch:
 
 	; Check for passed value in INI file

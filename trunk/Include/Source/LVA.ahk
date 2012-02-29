@@ -234,6 +234,8 @@ LVA_OnNotify(wParam, lParam, msg, hwnd)
     return lva_OnNotifyProg(wParam, lParam, msg, hwnd)
 }
 
+
+
 LVA_ListViewAdd(LVvar, Options="", UseFix=false, Opt="")
 {
   tmp := lva_hWndInfo(LVvar, 1)
@@ -253,6 +255,8 @@ LVA_ListViewAdd(LVvar, Options="", UseFix=false, Opt="")
     lva_Subclass(tmp2, "lva_OnLVScroll", Opt)
   LVA_Refresh(LVvar)
 }
+
+
 
 LVA_ListViewModify(LVvar, Options)
 {
