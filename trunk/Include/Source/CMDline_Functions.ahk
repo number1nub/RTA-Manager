@@ -94,7 +94,7 @@ Icon_1=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Resource\tools.ico
 ;===================================================
 try RegRead, installDir, HKCU, Software\Halliburton RTA Manager, InstallDir
 catch
-    installDir := A_MyDocuments\Halliburton RTA Manager
+    installDir := A_MyDocuments "\Halliburton RTA Manager"
 
 
   

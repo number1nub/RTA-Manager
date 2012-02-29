@@ -1,29 +1,15 @@
-Title: Halliburton RTA Manager Quick Guide
-	
+Title: Halliburton RTA Manager Quick Guide	
 	Halliburton RTA Manager is a revision controlled document, available
 	for download through either the CWI interface, or via a Halliburton
 	published document link.
 	
-	*Download and Install the <latest CWI Release! http://halcape001.corp.halliburton.com/PublishedDocs/Software_9290-5103_2.msi>
-
-
-Group: Change Log
-	Notable changes from previous CWI release
-		
-	o 
-	
-  o Sheet view mode tool allows switching between multiple preset table views & quick show/hide of individual columns
-  
-  o Open RTAs in CWI in your choice of multiple CWI views (i.e.- Navigate, Print, Create/Modify, Structure Mod/View, etc..)
-  o Weekly meeting comments button inserts blank line and "yyyy-MM-dd, WM: " at bottom of description. (Edit mode only)
-  o Email RTA submitter/requestor directly from RTA Details GUI
-  
-  
+	*Download and Install the latest CWI Release http://cwiprod.corp.halliburton.com/cwi/checkoutFCS.jsp?id=15832.16065.28299.34379&format=Excel&fileName=IncompleteRtaRpt_08082011.xlsx&lock=false!
+	http://halcape001.corp.halliburton.com/PublishedDocs/Software_9290-5103_2.msi>
 
 
 
-
-Group: Solutions & Tips for Common Issues
+Group: General Overview and Important Notes
+	Overview of commonly experienced issues and ways to help you avoid how to deal with them
 
 	*HAVING PROBLEMS WITH LARGE AND/OR GROWING BUTTONS/CONTROLS?
 	*IS TEXT ON BUTTONS/WINDOWS GETTING CUT OFF OR EXPANDING PAST THE BUTTON ITSELF?
@@ -41,11 +27,85 @@ Group: Solutions & Tips for Common Issues
 		
 		- If you are using the sheet and want to change the monitor's resolution, close
 		  the sheet, change resolution, and re-open it.
-		  
-		  **TIP: To permanently set these permissions:		
-		-   From the main Excel menu, go to Excel Options	
-		-   In the 'Trust Center' tab click 'Trust Center Settings'	
-		-   In 'Macro Settings' choose 'Enable all macros' and	
-			 in 'External Connections' choose 'Enable all Data Connections'	
 
+
+Group: Change Log
+	Listing of changes made between releases
+	
+	
+Summary of Significant Changes From Previous Release:
+
+	
+	
+	
+Build 4.2.2:
+	- 
+		
+		
+	
+	
+  o Sheet view mode tool allows switching between multiple preset table views & quick show/hide of individual columns
+  
+  o Open RTAs in CWI in your choice of multiple CWI views (i.e.- Navigate, Print, Create/Modify, Structure Mod/View, etc..)
+  o Weekly meeting comments button inserts blank line and "yyyy-MM-dd, WM: " at bottom of description. (Edit mode only)
+  o Email RTA submitter/requestor directly from RTA Details GUI
+  
+  
+
+
+
+Build 4.2.1.3:
+	- Updated SQL to include the columns RTA Requestor, Submitter, Mfg Start Date, Mfg Complete Date, Complete.actual date
+	- Updated RTA Sheet Tools to show GUI centered in Excel window
+	- Fixed default sheet view to display as PMT mode on open
+	- Added thisRtaRequestorFName as global variable
+
+	
+Build 4.2.1.2:
+	  - Updated RTA Sheet Tools to show GUI centered in Excel window
+	  - Fixed default sheet view to display as PMT mode on open
+	  - Added thisRtaRequestorFName as global variable
+
+
+Build 4.2.1.1:
+	  -Added missing splash image to installer
+	  -Other Bug fixes
+	  
+	  
+Build 4.2.0:
+	  - Multiple bug fixes in the sheet code & CMDline_Functions.ahk code.
+	  - Fixed the splash image display not going away
+	  - Fixed a bug in the 'send email to requestor'
+	  - Globalized/standardized & made consistent almost all variables in the sheet code; much more efficient & easy to follow code.
+	  - Re-structured repo folders and put together a much quicker & simpler build & deploy system
+	  
+	  
+Build 4.1.5.2:
+	- All new features completed & stable; time to betaa..	
+	
+	  
+Build 4.1.2:
+	- *New sheet style.* Multiple upgrdes, fixes improvements and add ons
+	- All UIs have a new clean format along with addition of graphical buttons
+	- with made clearer w/better contrast, and 
+	- Complete clean-up of code; much more efficient and reliable. Also Much 
+	  Better readability and developer-friendly in case someone else joins
+	  in maintainingg or takes over the project	    
+	  
+
+BUILD 4.0.1:
+	- Refresh button checks for RTAs to be loaded
+	- Changed exception path for saving sheet
+	- On save of rtaLoad to My Documents, a BU is saved to Public drive
+	  
+	  
+Build 3.1.2:
+	- Prioritizer bug fix. Prioritizer would not run due to new column sort toggle method. 
+	- Overhauled column sort routine.. again. Now uses a default sort order for the first header double-click based on the column and its contents.
+
+
+Build 3.0.24 (CWI Released Rev B):
+	- Improved column sort routine allows double clicking header multiple times to toggle sort oder
+	- Initial commit to Subversion
+	- Created an Advanced Installer project and deployed in MSI format instead of self compiled EXE
 
