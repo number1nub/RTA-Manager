@@ -10,7 +10,7 @@ Resource_Files=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Resource\tools.ico
 Set_Version_Info=1
 Company_Name=Halliburton - WellDynamics
 File_Description=GUI application with convinient sheet tools for RTA Management Sheet
-File_Version=2.1.0.3
+File_Version=2.1.0.10
 Inc_File_Version=1
 Internal_Name=RTA Sheet Tools
 Original_Filename=RTA Sheet Tools
@@ -58,11 +58,10 @@ AIS_COLUMNS =
 ;======================================================================================================
 ; DETERMINE RTA SHEET INSTALL LOCATION
 ;======================================================================================================
-InstallDir := Replace(RegRead("HKCU", "Software\Halliburton RTA Manager", "InstallDir"), """", "", "All")
-if !(InstallDir)     ;Error with reg entry. Set working dir to parent dir of this script
-	InstallDir = %a_scriptdir%\..
-
-
+try RegRead, InstallDir, HKCU, Software\Halliburton RTA Manager, InstallDir
+catch
+	InstallDir := A_MyDocuments "\Halliburton RTA Manager"
+installDir := RegExReplace(installDir, "\\$")
 
 
 
@@ -141,7 +140,6 @@ loop, %0%
 	RowCount-=4
 
 
-msgbox %p1%`n`n%p2%
 
 
 ;======================================================================================================
@@ -158,49 +156,49 @@ OnMessage("0x4E", "LVA_OnNotify")
 ;Build GUI
 ;======================================================================================================
 buildGUI:
-Gui, +AlwaysOnTop -caption +border
+	Gui, +AlwaysOnTop -caption +border
 
-Gui, margin, 0, 0
-Gui, font, s10 w500R
-;~ Gui, font, s10 w700 c737373
-Gui, Color, White, White
-gui, Margin, 0, 10
-
-;--- Title Image ---
-Gui, add, Picture, y0 gTitleEvent section, %InstallDir%\Resource\RTA Sheet Tools Header.png
-
-
-;--- Listview ---
-gui, Font, cwhite
-Gui, Add, ListView, x15 y+15 w230 BackgroundE0E0E0 r%RowCount% Checked AltSubmit vMyListView gMyListView Grid -Hdr NoSort Section, |Column Header
+	Gui, margin, 0, 0
+	Gui, font, s10 w500R
+	;~ Gui, font, s10 w700 c737373
+	Gui, Color, White, White
+	gui, Margin, 0, 10
+	
+	;--- Title Image ---
+	Gui, add, Picture, y0 gTitleEvent section, %InstallDir%\Resource\RTA Sheet Tools Header.png
 
 
-;--- AIS & LT's GroupBox ---
-Gui, font, s10 w700 c737373
-Gui, Add, GroupBox, x+30 ys-5 w115 h60 center Section, AIS && LT's
-Gui, font, s10 w500
-
-BUTTON_OPTS = W50 H30
-Gui, Add, Button, xp+6 ys+20 %BUTTON_OPTS% gtoggleAIS, Show
-Gui, Add, Button, x+2 yp %BUTTON_OPTS% gtoggleAIS, Hide
+	;--- Listview ---
+	gui, Font, cwhite
+	Gui, Add, ListView, x15 y+15 w230 BackgroundE0E0E0 r%RowCount% Checked AltSubmit vMyListView gMyListView Grid -Hdr NoSort Section, |Column Header
 
 
-;--- PRESET Views GroupBox ---
-gui, Font, w700
-Gui, Add, GroupBox, xs-8 y+20 w130 h240 center Section, Preset Views
-Gui, font, s10 w500
+	;--- AIS & LT's GroupBox ---
+	Gui, font, s10 w700 c737373
+	Gui, Add, GroupBox, x+30 ys-5 w115 h60 center Section, AIS && LT's
+	Gui, font, s10 w500
 
-BUTTON_OPTS = w110 H30
-
-Gui, Add, Button,  xs+7 ys+23 %BUTTON_OPTS% gpresetViews vpmtHide, PMT Mode
-Gui, Add, Button,  xp y+5 %BUTTON_OPTS% gpresetViews vdeptHide, Edit Mode
-Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vtrackRtaHide, RTA Tracking
-Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vtrackTSGhide, TSG Mode
-Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vrtaDatesHide, RTA Dates
-Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vshowAll, Show All
+	BUTTON_OPTS = W50 H30
+	Gui, Add, Button, xp+6 ys+20 %BUTTON_OPTS% gtoggleAIS, Show
+	Gui, Add, Button, x+2 yp %BUTTON_OPTS% gtoggleAIS, Hide
 
 
-gui, Add, Text, ys+140,
+	;--- PRESET Views GroupBox ---
+	gui, Font, w700
+	Gui, Add, GroupBox, xs-8 y+20 w130 h240 center Section, Preset Views
+	Gui, font, s10 w500
+
+	BUTTON_OPTS = w110 H30
+
+	Gui, Add, Button,  xs+7 ys+23 %BUTTON_OPTS% gpresetViews vpmtHide, PMT Mode
+	Gui, Add, Button,  xp y+5 %BUTTON_OPTS% gpresetViews vdeptHide, Edit Mode
+	Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vtrackRtaHide, RTA Tracking
+	Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vtrackTSGhide, TSG Mode
+	Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vrtaDatesHide, RTA Dates
+	Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vshowAll, Show All
+
+
+	gui, Add, Text, ys+140,
 
 gosub, getColumnInfo
 
