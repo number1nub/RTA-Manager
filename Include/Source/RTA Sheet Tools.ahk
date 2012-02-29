@@ -10,7 +10,7 @@ Resource_Files=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Resource\tools.ico
 Set_Version_Info=1
 Company_Name=Halliburton - WellDynamics
 File_Description=GUI application with convinient sheet tools for RTA Management Sheet
-File_Version=1.0.0.70
+File_Version=2.1.0.3
 Inc_File_Version=1
 Internal_Name=RTA Sheet Tools
 Original_Filename=RTA Sheet Tools
@@ -141,6 +141,7 @@ loop, %0%
 	RowCount-=4
 
 
+msgbox %p1%`n`n%p2%
 
 
 ;======================================================================================================
@@ -186,7 +187,7 @@ Gui, Add, Button, x+2 yp %BUTTON_OPTS% gtoggleAIS, Hide
 
 ;--- PRESET Views GroupBox ---
 gui, Font, w700
-Gui, Add, GroupBox, xs-4 y+20 w125 h230 center Section, Preset Views
+Gui, Add, GroupBox, xs-8 y+20 w130 h240 center Section, Preset Views
 Gui, font, s10 w500
 
 BUTTON_OPTS = w110 H30
@@ -411,7 +412,7 @@ return
 ;======================================================================================================
 PresetViews:
 	xl.cells.ENTIRECOLUMN.Hidden:=false
-	xl.Range(A_GuiControl).ENTIRECOLUMN.Hidden:=true	
+	xl.Range(A_GuiControl).ENTIRECOLUMN.Hidden:=true
 	Sleep 50
 	ExitApp
 return
@@ -506,9 +507,3 @@ Excel_Acc_ObjectFromWindow(hWnd, idObject = -4){
   Return  ComObjEnwrap(9,pacc,1)
 }
 
-
-
-;______________________ I N C L U D E   F I L E S _______________________________________
-;-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#Include %a_scriptdir%\anchor.ahk
-#Include %a_scriptdir%\lva.ahk
