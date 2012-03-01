@@ -9,7 +9,7 @@ SetWorkingDir, %A_ScriptDir%
 ;=======================================================================
 	InstallerPath := "\\corp.halliburton.com\team\WD\public\Rameen Bakhtiary\setup files"
 	UpdateInfoPath := InstallerPath "\update.ini"
-	
+
 
 
 ;=================================================
@@ -33,19 +33,23 @@ SetWorkingDir, %A_ScriptDir%
 	;==============================
 	;	Compare versions
 	;==============================
-		if ((userVersion = "NONE") || (buildVersion >= userVersion)){
-			try RunInstall(InstallerPath)
-			catch e {
-				;==============================
-				;	Failed to install
-				;==============================
-				MsgBox, 4144, RTA Management Sheet BETA, % "Failed to complete installation.`n`n" e
-				ExitApp
-			}
-		} else {
+		if ((userVersion = "NONE") || (buildVersion >= userVersion))
+			goto runInstaller			
+		else 
+		{
 			MsgBox, Your Sheet is up to date!
 			ExitApp
 		}
+
+runinstaller:
+	RunIt(InstallerPath)
+	;~ catch e {
+		;~ ;==============================
+		;~ ;	Failed to install
+		;~ ;==============================
+		;~ MsgBox, 4144, RTA Management Sheet BETA, % "Failed to complete installation.`n`n" e
+		;~ ExitApp
+	;~ }
 	
 	;==================================
 	;	Log that user downloaded update
@@ -54,8 +58,9 @@ SetWorkingDir, %A_ScriptDir%
 		fileappend, `n - %dltime%`t`t`t%A_Username%`t`t`t%betaVersion%, %InstallerPath%\Internal\Beta Updater.txt
 		sleep 100
 ExitApp
-		
-		
+
+
+	
 ;______________________________________________________________
 ;==============================================================
 ;	Function: RunInstall
@@ -65,7 +70,17 @@ ExitApp
 ;	Parameters:
 ;		_Path	-	Full path to MSI installer file
 ;==============================================================
-RunInstall(_Path){
+RunIt(_Path)
+{
+	
+	;==============================
+	;	Check for installer file
+	;==============================
+	!FileExist(_Path)
+		throw "Update installer file not found"
+		
+	
+	
 	;================================
 	;	Copy the MSI to user Temp dir
 	;================================
@@ -81,7 +96,6 @@ RunInstall(_Path){
 		catch 
 			throw "Error occurred while attempting to run installer file."
 }
-
 
 
 
