@@ -6,11 +6,11 @@ Exe_File=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Include\RTA Sheet Tools.exe
 Created_Date=1
 Execution_Level=2
 [VERSION]
-Resource_Files=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Resource\tools.ico
+Resource_Files=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Include\Source\tools.ico
 Set_Version_Info=1
 Company_Name=Halliburton - WellDynamics
 File_Description=GUI application with convinient sheet tools for RTA Management Sheet
-File_Version=2.1.0.10
+File_Version=2.1.0.12
 Inc_File_Version=1
 Internal_Name=RTA Sheet Tools
 Original_Filename=RTA Sheet Tools
@@ -18,7 +18,7 @@ Product_Name=Source: AutoHotkey_L
 Product_Version=1.1.5.6
 Set_AHK_Version=1
 [ICONS]
-Icon_1=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Resource\tools.ico
+Icon_1=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Include\Source\tools.ico
 
 * * * Compile_AHK SETTINGS END * * *
 */

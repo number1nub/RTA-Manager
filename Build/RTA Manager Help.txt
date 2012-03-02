@@ -3,7 +3,7 @@ Title: Halliburton RTA Manager Quick Guide
 	for download through either the CWI interface, or via a Halliburton
 	published document link.
 	
-	Download and Install the latest CWI Release at <http://halcape001.corp.halliburton.com/PublishedDocs/Software_9290-5103_2.msi>
+	Download and Install the <latest CWI Release http://cwiprod.corp.halliburton.com/cwi/View.jsp?type=Software&name=9290-5103&revision=lastRelease>
 
 
 Group: Change Log
