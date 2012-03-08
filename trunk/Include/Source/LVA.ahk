@@ -231,7 +231,9 @@ LVA_OnNotify(wParam, lParam, msg, hwnd)
 {
   Critical, 500
   if lva_hWndInfo(NumGet(lParam + 0),2)
+  {    
     return lva_OnNotifyProg(wParam, lParam, msg, hwnd)
+  }
 }
 
 

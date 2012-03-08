@@ -10,33 +10,32 @@ Resource_Files=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Include\Source\tools.ico
 Set_Version_Info=1
 Company_Name=Halliburton - WellDynamics
 File_Description=GUI application with convinient sheet tools for RTA Management Sheet
+<<<<<<< .mine
+File_Version=2.0.1.1
+Inc_File_Version=0
+=======
 File_Version=2.1.0.12
 Inc_File_Version=1
+>>>>>>> .r61
 Internal_Name=RTA Sheet Tools
 Original_Filename=RTA Sheet Tools
 Product_Name=Source: AutoHotkey_L
 Product_Version=1.1.5.6
 Set_AHK_Version=1
 [ICONS]
+<<<<<<< .mine
+Icon_1=%In_Dir%\tools.ico
+=======
 Icon_1=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Include\Source\tools.ico
+>>>>>>> .r61
 
 * * * Compile_AHK SETTINGS END * * *
 */
 
 ;_____________________________________________________________________
 ;---------------------------------------------------------------------
-; TITLE:            R T A   S H E E T   T O O L S
-;---------------------------------------------------------------------
-; AUTHORS:
-;	GUI & LAYOUT:		Sam T (acTennisKrazy)
-;	FULL INTEGRATION:	Rameen B  (WSNHapps)
-; DATE:			 		10/27/2011
-; LANGUAGE:		 		English
-; PLATFORM:		 		Created on Windows 7
-; AHK-VERSION:	  		AutoHotkey_L
-;---------------------------------------------------------------------
-; DESCRIPTION:
-; 
+; TITLE: RTA Sheet Tools
+;--------------------------------------------------------------------- 
 ; External GUI that gives the RTA sheet additional functionality.
 ; Performs tasks  such as hiding rows and generating reports through
 ; and Excel COM interface.
@@ -110,34 +109,20 @@ Loop, 26 {
 }
 
 
-
-
-
-
-
 ;======================================================================================================
 ;PARAMETER HANDLER - EXIT IF NOT RUN WITH PARAMETERS
 ;======================================================================================================
 if 0=0
 	ExitApp
 
-
-
-
-
-
-
-;======================================================================================================
-;ASSIGN PARAMETERS TO VARIABLES P1, P2,... PN
-;======================================================================================================
 loop, %0%
 	p%a_index% := % %a_index%
 
-	;Row count for listview control
-	RowCount := 0
-	loop, parse, p1, CSV, %A_Space%
-		RowCount ++
-	RowCount-=4
+;Row count for listview control
+RowCount := 0
+loop, parse, p1, CSV, %A_Space%
+	RowCount ++
+RowCount-=4
 
 
 
@@ -197,6 +182,14 @@ buildGUI:
 	Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vrtaDatesHide, RTA Dates
 	Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vshowAll, Show All
 
+<<<<<<< .mine
+Gui, Add, Button,  xs+7 ys+23 %BUTTON_OPTS% gpresetViews vpmtHide, PMT Mode
+Gui, Add, Button,  xp y+5 %BUTTON_OPTS% gpresetViews vdeptHide, Edit Mode
+Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vtrackRtaHide, RTA Tracking
+Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vTSGhide, TSG Mode
+Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vshowAll, Show All
+=======
+>>>>>>> .r61
 
 	gui, Add, Text, ys+140,
 
@@ -406,7 +399,7 @@ return
 
 
 ;======================================================================================================
-;PM DATES HIDE BUTTON EVENT
+;PRESET SHEET VIEW BUTTON EVENT
 ;======================================================================================================
 PresetViews:
 	xl.cells.ENTIRECOLUMN.Hidden:=false
@@ -454,8 +447,7 @@ ShowRowColor(RowNum, EndRow="")
 ;SET COLORS FOR NOT VISIBLE ROWS
 ;======================================================================================================
 HideRowColor(RowNum, EndRow="")
-{
-	
+{	
 	LoopCT := EndRow ? (EndRow-RowNum)+1 : 1
 
 	Loop, %LoopCT%
