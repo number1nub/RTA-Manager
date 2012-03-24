@@ -6,11 +6,11 @@ Exe_File=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Include\CMDline_Functions.exe
 Created_Date=1
 Execution_Level=2
 [VERSION]
-Resource_Files=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Resource\tools.ico
+Resource_Files=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Include\Source\tools.ico
 Set_Version_Info=1
 Company_Name=Halliburton - WellDynamics
 File_Description=Functions, macros & scripts accessible via CMD line parameters. Supplements (and is required in order to run) the RTA Management Sheet.
-File_Version=2.1.0.50
+File_Version=3.0.1.0
 Inc_File_Version=0
 Internal_Name=CMDline_Functions
 Legal_Copyright=Rameen Bakhtiary - Halliburton|WellDynamics
@@ -19,7 +19,7 @@ Product_Name=Source - AutoHotkey_L
 Product_Version=1.1.5.6
 Set_AHK_Version=1
 [ICONS]
-Icon_1=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Resource\tools.ico
+Icon_1=%In_Dir%\tools.ico
 
 * * * Compile_AHK SETTINGS END * * *
 */
@@ -222,7 +222,7 @@ Splash:
     ;   Set a backup time to destroy the
     ;   splash incase something happens
     ;   
-        SetTimer, splashTimeout, 10000
+        SetTimer, splashTimeout, 15000
         
     ;______________
     ; 	Show splash
