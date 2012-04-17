@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<DOCUMENT Type="Advanced Installer" CreateVersion="8.4" version="9.0" Modules="simple" RootPath="." Language="en" Id="{D2644A98-6C2A-4C2B-ACD8-42223F78C6B0}">
+<DOCUMENT Type="Advanced Installer" CreateVersion="8.4" version="8.9" Modules="simple" RootPath="." Language="en" Id="{D2644A98-6C2A-4C2B-ACD8-42223F78C6B0}">
   <COMPONENT cid="caphyon.advinst.msicomp.MsiPropsComponent">
     <ROW Property="AI_OFFICE2003APP" MultiBuildValue="DefaultBuild:Microsoft Excel" ValueLocId="-"/>
     <ROW Property="ALLUSERS" Value="2" MultiBuildValue="DefaultBuild:3"/>
@@ -11,10 +11,10 @@
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="MSIFASTINSTALL" MultiBuildValue="DefaultBuild:7"/>
     <ROW Property="Manufacturer" Value="Halliburton - WellDynamics" ValueLocId="*"/>
-    <ROW Property="ProductCode" Value="1033:{D8180B91-8414-46E0-B858-090C9C96C690} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{A6F1DF41-B944-45F3-8298-E60D68CDFB94} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="Halliburton RTA Manager" ValueLocId="*"/>
-    <ROW Property="ProductVersion" Value="4.2.6"/>
+    <ROW Property="ProductVersion" Value="4.2.5"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{19151B34-818D-49A2-B327-CC65233BCBF8}"/>
@@ -33,7 +33,7 @@
     <ROW Component="CMDline_Functions.exe" ComponentId="{4202D691-01E2-4603-9E38-623408F2C260}" Directory_="Include_Dir" Attributes="0" KeyPath="CMDline_Functions.exe"/>
     <ROW Component="Halliburton_RTA_Manager.xlsm" ComponentId="{2BBD70E5-083E-4E9F-80A1-230236245016}" Directory_="APPDIR" Attributes="0" KeyPath="Halliburton_RTA_Manager.xlsm"/>
     <ROW Component="InstallDir" ComponentId="{3F740626-BDDB-42B3-8501-5F284636C07C}" Directory_="APPDIR" Attributes="4" KeyPath="InstallDir"/>
-    <ROW Component="PackageBuild.ahk" ComponentId="{4F25D903-7686-47FD-BA39-F70C91C04620}" Directory_="APPDIR" Attributes="0" KeyPath="CustomizableSettings.ini" Type="0"/>
+    <ROW Component="PackageBuild.ahk" ComponentId="{4F25D903-7686-47FD-BA39-F70C91C04620}" Directory_="APPDIR" Attributes="0" KeyPath="README.html" Type="0"/>
     <ROW Component="PrintHeader.png" ComponentId="{AA931A6B-7B15-4B28-868B-BC25209F0411}" Directory_="Resource_Dir" Attributes="0" KeyPath="PrintHeader.png" Type="0"/>
     <ROW Component="RTASheetTools.exe" ComponentId="{5AB7480C-0BB2-4E4A-B49A-884566FFABF4}" Directory_="Include_Dir" Attributes="0" KeyPath="RTASheetTools.exe"/>
     <ROW Component="SHORTCUTDIR" ComponentId="{5CA86C23-4A95-4640-B267-4906F04F662A}" Directory_="SHORTCUTDIR" Attributes="0"/>
@@ -48,8 +48,9 @@
     <ROW File="CustomizableSettings.ini" Component_="PackageBuild.ahk" FileName="Custom~1.ini|Customizable Settings.ini" Attributes="0" SourcePath="..\Customizable Settings.ini" SelfReg="false" NextFile="refresh.png"/>
     <ROW File="HalliburtonRTAManager.png" Component_="PrintHeader.png" FileName="Hallib~1.png|Halliburton RTA Manager.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Resource\Halliburton RTA Manager.png" SelfReg="false" NextFile="IntroSheetHeader.png"/>
     <ROW File="Halliburton_RTA_Manager.xlsm" Component_="Halliburton_RTA_Manager.xlsm" FileName="Hallib~1.xls|Halliburton RTA Manager.xlsm" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Halliburton RTA Manager.xlsm" SelfReg="false" NextFile="CMDline_Functions.exe"/>
-    <ROW File="IntroSheetHeader.png" Component_="PrintHeader.png" FileName="IntroS~1.png|Intro Sheet Header.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Resource\Intro Sheet Header.png" SelfReg="false" NextFile="CustomizableSettings.ini"/>
+    <ROW File="IntroSheetHeader.png" Component_="PrintHeader.png" FileName="IntroS~1.png|Intro Sheet Header.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Resource\Intro Sheet Header.png" SelfReg="false" NextFile="README.html"/>
     <ROW File="PrintHeader.png" Component_="PrintHeader.png" FileName="PrintH~1.png|Print Header.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Resource\Print Header.png" SelfReg="false" NextFile="ReportHeader.png"/>
+    <ROW File="README.html" Component_="PackageBuild.ahk" FileName="README~1.htm|README.html" Attributes="0" SourcePath="..\README.html" SelfReg="false" NextFile="CustomizableSettings.ini"/>
     <ROW File="RTASheetTools.exe" Component_="RTASheetTools.exe" FileName="RTAShe~1.exe|RTA Sheet Tools.exe" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Include\RTA Sheet Tools.exe" SelfReg="false" NextFile="PrintHeader.png"/>
     <ROW File="RTASheetToolsHeader.png" Component_="PrintHeader.png" FileName="RTAShe~1.png|RTA Sheet Tools Header.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Resource\RTA Sheet Tools Header.png" SelfReg="false" NextFile="Splash.png"/>
     <ROW File="ReportHeader.png" Component_="PrintHeader.png" FileName="Report~1.png|Report Header.png" Version="65535.65535.65535.65535" Attributes="0" SourcePath="..\Resource\Report Header.png" SelfReg="false" NextFile="RTASheetToolsHeader.png"/>
