@@ -1,89 +1,473 @@
-/* ***************************************************************************************************
- *  	Title: CWI Object Class
- * ***************************************************************************************************
- */
- 
+;---------------------------------------------------------------------------------------------------
+;	Title: CWI Search Functions Wrapper
+;	
+;		Set of functions that perform actions relating to searching CWI and/or opening
+;		object pages in CWI.	
+;---------------------------------------------------------------------------------------------------
 
 
-/*  ===================================================================================================
- *  CLASS:	Cwi
- *  ~~~~~~~~~~~~~~~~~~~~~
- * 	CWI Object class used to quickly get, add and change CWI object information. Also allows 
- * 	methods for quickly obtaining and opening an objects CWI URL for instant viewing in CWI. 
- * 	On initialization of a new instance, the full contents of the CWI object data files are stored
- *  to variables and are accessible.		
- *
- *	PARAMETERS:
- *  ~~~~~~~~~~~~~~~~~~~~~
- * 	The class instantiator does accept an *optional* parameter representing the root path of the 
- * 	CWI Object info INI files. The current default is set to the Eng. Pub. "pm app logs\strMgmtLks"
- *  folder. 
- *
- * 	REMARKS:
- *  ~~~~~~~~~~~~~~~~~~~~~
- * 	Upon creation of a new instance of the object, the following global variables are available:
- * 	- [instance name].allSAPnums - Contains list of all Ref number / SAP number relations recorded.
- * 	- [instance name].ALLids - Contains list of all object number / CWI jspID number relations recorded.
- *
- * 	ERRORLEVEL:
- *  ~~~~~~~~~~~~~~~~~~~~~
- *	ErrorLevel is set to 1 if there was a problem constructing the class.
- *
- *	EXAMPLE: 
- *  ~~~~~~~~~~~~~~~~~~~
- * ;		(Start Code)
-				cwi := new cwi()
+
+;***************************************************************************************************
+;	Function: CWI_Lookup
+;		Main entry-point function for performing searches and other actions in CWI. 
+;
+;		Call CWIsearch with your search text as the parameters and it takes care of everything
+;		else.
+;
+;	Note:
+;		The method used to perform searches implements the custom view notation implemented in
+;		the PM App Launcher tool, CWI Search Bar, where a ">" separates the search string from
+;		a view identifier code as shown in the example below.
+;
+;		(Start code AHK)
+;			; Open 9290-9868 in CWI in Navigate view
+;			CWIsearch("9290-9868>n")
+;		(End)
+;
+;		See the <CWI Object Class> documentation for more details on CWI search options and features.
+;
+CWI_Lookup(sTxt, tabbed = ""){
+	
+	;_________________________________
+	; Special trigger keyword searches
+	;
+		if !(sTxt){
+			open_lookup()
+			return
+		} 
+		else if (sTxt = "qcal"){
+			Calibrate()
+			return
+		}
+	;______________________________
+	; Save search txt for history
+	;
+		add_History(sTxt)
+	;______________________________
+	; Auto-open from saved CWI info
+	;		
+		cView := get_CustomView(sTxt)
+		oCwi := new CWI
+		Url := oCwi.Url(sTxt, cView)	
+		if (Url){
+			Run, iexplore.exe %Url%
+			ErrorLevel:=""
+			return
+		}
+		
+	;____________________________________
+	; Manual send-strokes Advanced Lookup
+	;
+		Loop {
+			cal := get_Calib()
+			if ErrorLevel
+			{	
+				;Attempt to migrate if not already tried
+				RegRead, triedMigration, HKCU, Software\PM App Launcher\CWI Search Bar, didMigrate
+				if triedMigration != 1
+					Migrate_Settings()
+				Calibrate()
 				If ErrorLevel
-				{	MsgBox An error occurred while creating an instance of the class... `n`nAborting.
 					ExitApp
-				}
+			}
+		} until !(ErrorLevel)
 				
-				MsgBox % cwi.url("9290-2658")
-				
-				MsgBox % cwi.url("744677")
-				
- *
- *  ===================================================================================================
- */
-class CWI{
+		win := open_lookup()	
+		SetKeyDelay, 10
+		SetMouseDelay, 10
+		CoordMode, mouse, relative
 		
+		MouseMove, % cal.x, % cal.y
+		Click 3
+		Sleep, 50
+		Send, %sTxt%{Tab}
+		Sleep 50
+		Send, {Backspace}
+		send, {Enter}
+
+		if !(win.existed || tabbed){
+			sleep 2000
+			winclose, % "ahk_id " win.id
+		}
+}
+
+
+
+
+
+;***************************************************************************************************
+;	Function: get_Calib
+;		Returns an object containing the X and Y calibration coordinates of the "Search Text" field in 
+;		a CWI Advanced Lookup window.
+;
+;	Return Value:
+;		An array containing 2 elements indexed as "x" and "y" is returned containing the calibration
+;		values (as integers). For example-
+;			> If one or both of the calibration values are not found then ErrorLevel is set to 1; ErrorLevel 
+;		is set to 0 otherwise.
+;	
+get_Calib(){
+	RegRead, xC, HKCU, Software\PM App Launcher\CWI Search Bar\Calibration, xCoord	
+	RegRead, yC, HKCU, Software\PM App Launcher\CWI Search Bar\Calibration, yCoord	
+	ErrorLevel := (xC = "" || yC = "") ? 1 : ""	
+	calib := {x:xC, y:yC}
+	return calib
+}
+
+
+
+
+
+;***************************************************************************************************
+;	Function: Calibrate
+;		Handles the process of obtaining the mouse-click coordinates required by the search
+;		function. The user is prompted with instructions, and upon completing the calibration
+;		the values are stored in the registry and *ErrorLevel* is set to 0.	If for any reason 
+;		the values don't get saved properly into the registry then *ErrorLevel* is set to 1.
+;
+;	Parameters:
+;		noPrompt -	*(Optional)* If this value is passed as 1 then the instruction prompts
+;					will be skipped. Not recommended to be used when calling the function
+;					since it is always wise to give instruction to user; this is mostly 
+;					utilized by the function itself in cases where a "retry" requires calling
+;					itself and re-prompting would be annoying.
+;
+Calibrate(noPrompt = ""){
+	CoordMode, mouse, Relative
+	
+	;______________________________________
+	; PROMPT THE USER WITH SOME INSTRUCTION
+	; (UNLESS noPrompt=1)
+	;
+		if !(noPrompt){
+				
+			InStruction_Txt=
+			(LTrim, RTrim
+				Quick and Easy Calibration!!
+			
+				`t1.) Wait for the CWI Advanced Lookup window to open/load
+			
+				`t2.) Click in the `"Search Text`" field -- That's it!
+			)
+			
+			msgbox, 4161, CWI Search Calibration, % InStruction_Txt			
+			IfMsgBox Cancel
+				return
+		}
+	;________________________________________
+	; OPEN A  CWI ADV. LOOKUP WINDOW AND WAIT
+	; UNTIL IT IS LOADED & ACTIVE
+	;
+		open_Lookup()
 		
+	;____________________________________
+	; WAIT FOR AND RECORD THE MOUSE CLICK
+	;
+		Retry:
+		KeyWait, LButton, d
+		MouseGetPos, mx, my, win
+		Sleep, 75
+		WinGetTitle, title, ahk_id %win%
+		
+	;______________________________________________________________
+	; USER CLICKED IN AN INVALID LOCATION. PROMPT & TRY AGAIN/ABORT
+	;
+		If !instr(title, "Advanced Lookup")
+		{
+			msgbox, 4149, , Ooops!`n`nIt looks like you clicked in the wrong window--`n`nRemember`, just click in the `"Search Text`" field to calibrate!
+		
+			;______________________________________________________
+			; CLICKED RETRY - LOOP BACK TO BEGINNING OF CALIBRATION
+			;
+			IfMsgBox Retry
+			{
+				WinClose, Advanced Lookup -
+				Sleep 100
+				goto ReTry
+			}
+			;_________________
+			; OTHERWISE, ABORT
+			;
+			else
+			{
+				msgbox, 4096, , Aborting calibration...
+				ErrorLevel := 1
+				return
+			}
+		}				
+	
+	;____________________________________________
+	; RECEIVED VALID INPUT -- WRITE VALUES TO REG
+	;		
+		WinClose, Advanced Lookup -
+		writeCalib(mx, my)		
+		ErrorLevel := ErrorLevel ? 1 : ""
+	
+		If !(ErrorLevel)
+			msgbox, CWI Search calibration successfully saved!			
+	return
+}
+
+
+
+
+;***************************************************************************************************
+;	Function: writeCalib
+;		Writes the given values to the proper location in the registry. The function performs
+;		some validation by ensuring the Reg values exist and are equal to the passed values,
+;		and sets ErrorLevel to 0 if all is good.
+;
+;	Parameters:
+;		mx	- X-Coordinate to write to registry
+;		my	- Y-Coordinate to write to registry
+;
+writeCalib(mx, my){	
+	;_________________________
+	; WRITE VALUES TO REGISTRY
+	;
+		RegWrite, REG_SZ, HKCU, Software\PM App Launcher\CWI Search Bar\Calibration, xCoord, %mx%		
+		Sleep 50
+		RegWrite, REG_SZ, HKCU, Software\PM App Launcher\CWI Search Bar\Calibration, yCoord, %my%
+		Sleep 50
+	;___________________
+	; VALIDATE THE WRITE
+	;
+		RegRead, test, HKCU, Software\PM App Launcher\CWI Search Bar\Calibration, yCoord
+		if (test = "" || test != my){
+			msgbox, 4144, , There was an issue while trying to write calibration data`nto your registry. Try re-installing the PM App Launcher package to fix the issue.`n`nPlease report this issue if it persists.
+			ErrorLevel:=1
+			return
+		}
+	ErrorLevel:=""
+	return
+}
+
+
+
+
+;***************************************************************************************************
+;	Function: get_CustomView
+;
+;	Parameters:
+;		sTxt	-	The search text entry to save into the history as "last searched"
+;
+add_History(sTxt){
+	RegWrite, REG_SZ, HKCU, Software\PM App Launcher\CWI Search Bar\History, lastSearch, %sTxt%
+}
+
+
+
+
+
+;***************************************************************************************************
+;	Function: get_CustomView
+;		Returns the last searched item from the CWI Search Bar history
+;
+get_History(){	
+	RegRead, retVal, HKCU, Software\PM App Launcher\CWI Search Bar\History, lastSearch
+	return retVal
+}
+
+
+
+
+
+;***************************************************************************************************
+;	Function: get_CustomView
+;
+;		Returns the custom view identifier if found in the given text. The function also modifies
+;		the search string passed by removing the identifier so that only the actual search text 
+;		remains.
+;
+;	Parameters:
+;		sTxt	- 	A string in which to look for a CWI view modifier. Passed
+;					ByRef so that the view modifier can be removed from the string when found.
+;
+get_CustomView(ByRef sTxt){
+	if RegExMatch(sTxt, ">(?P<view>\w+)?$", cust){
+		StringTrimRight, sTxt, sTxt, % (StrLen(custview) + 1)
+		return custView
+	}
+}
+
+
+
+
+;***************************************************************************************************
+;	Function: open_Lookup
+;
+;		Opens/activates a CWI Advanced Lookup window. Waits until the window is fully loaded
+;		and active before returning. Returns the HWND of the IExplore window launched.
+;
+;	Return Value:
+;		Returns the window handle (HWND) of the Advanced Lookup IE window
+;
+open_Lookup(){	
+	SetTitleMatchMode, 2
+	didExist := 1
+	
+	;_______________________________________________________
+	; 	CHECK FOR & ACTIVATE EXISTING ADVANCED LOOKUP WINDOW
+	;
+	If not winID := WinExist("Advanced Lookup -")
+	{				
+		didExist:=""
+		;________________________________________________________
+		;OPEN AN ADV. LOOKUP WINDOW AND WAIT FOR IT TO FULLY LOAD
+		;
+		Run, iexplore.exe http://cwiprod.corp.halliburton.com/cwi/AdvLookup.jsp
+		WinWaitActive, Advanced Lookup -
+		IfWinNotActive, Advanced Lookup -
+			WinActivate, Advanced Lookup -
+		winID := WinExist("A")	
+		Sleep, 400	
+		StatusBarWait,Done,,1,Advanced Lookup -
+		Sleep 200
+		StatusBarWait,Done,,1,Advanced Lookup -
+		Sleep 200
+		StatusBarWait,Done,,1,Advanced Lookup -
+		Sleep 200
+	}
+	WinActivate, ahk_id %wid%
+	sleep 350
+	winInfo := {id:winID, existed:didExist}
+	return winInfo
+}
+
+
+
+
+
+
+
+;***************************************************************************************************
+;	Function: Migrate_Settings
+;		This function goes through the user's settings and files in attempt to gather missing 
+;		settings/data that changed location from previous versions. For example, coordinate 
+;		values previously stored in an INI file are now being stored and looked for in the registry;
+;		when this function is called it searches all previous setting locations and writes values
+;		to the updated location if found.
+;
+;	Note:
+;		Function marks in the user's registry noting that migration was attempted to prevent wasting
+;		time/memory checking what has already been checked.
+;
+Migrate_Settings(){
+	
+	;Record that migration has been attempted
+	RegWrite, REG_SZ, HKCU, Software\PM App Launcher\CWI Search Bar, didMigrate, 1
+		
+	;Try to set calibration from old calib. locations
+	if checkSettings(A_MyDocuments "\PM App Launcher\Include\CWI SB\callibrationSettings.ini")
+		goto settingsFound
+	else if checkSettings(A_MyDocuments "\Halliburton RTA Manager\Include\callibrationSettings.ini")
+		goto settingsFound
+	else if checkSettings(A_MyDocuments "\Halliburton RTA Manager\Include\calibrationSettings.ini")
+		goto settingsFound
+	else
+	{
+		ErrorLevel := 1
+		return
+	}		
+	settingsFound:
+	ErrorLevel := ""
+}
+
+
+
+;***************************************************************************************************
+;	Function: CheckSettings
+;		Sets CWI calibration data in registry if found in the given file. If the file doesn't exist 
+;		or if the file doesn't contain valid CWI callibration data, then the function returns
+;		an empty value & ErrorLevel is set to 1; if calibration data is found & set, Errorlevel is
+;		set to 0.
+;
+;	Parameters:
+;		_filePath	-	The full path of the file in which to look for CWI callibration settings	
+;
+checkSettings(_filePath){
+	If fileexist(_filePath)
+	{
+		IniRead, oldX, %_filePath%, fieldCoords, x, Err
+		IniRead, oldY, %_filePath%, fieldCoords, ST, Err
+		if ((oldX <> "Err" && oldX > 50) && (oldY <> "Err" && oldY > 50))
+		{
+			;Found calibration
+			writeCalib(oldX, oldY)
+			ErrorLevel := ""
+			return 1
+		}
+	}
+	ErrorLevel := 1
+}
+
+
+
+
+
+
+
+;***************************************************************************************************
+;	 Class:	Cwi
+;		CWI Object class used to quickly get, add and change CWI object information. Also allows 
+;		methods for quickly obtaining and opening an objects CWI URL for instant viewing in CWI. 
+;		On initialization of a new instance, the full contents of the CWI object data files are stored
+;	 	to variables and are accessible.		
+;
+;	Parameters:
+;		The class instantiator does accept an *optional* parameter representing the root path of the 
+;		CWI Object info INI files. The current default is set to the Eng. Pub. "pm app logs\strMgmtLks"
+;	 	folder. 
+;
+;	Remarks:
+;		Upon creation of a new instance of the object, the following global variables are available:
+;		- [instance name].allSAPnums - Contains list of all Ref number / SAP number relations recorded.
+;		- [instance name].ALLids - Contains list of all object number / CWI jspID number relations recorded.
+;
+;		ERRORLEVEL:
+;
+;		ErrorLevel is set to 1 if there was a problem constructing the class.
+;
+;	Example: 
+;		(Start Code AHK)
+;			cwi := new cwi()
+;			If ErrorLevel
+;			{	MsgBox An error occurred while creating an instance of the class... `n`nAborting.
+;				ExitApp
+;			}
+;			
+;			MsgBox % cwi.url("9290-2658")
+;			
+;			MsgBox % cwi.url("744677")
+;		(End)
+;
+class CWI
+{		
 	idINI_path := ""
 	sapINI_path := ""
 	rtaINI_path := ""
-	
-	;=================================================================
-	;              CONSTRUCTOR FOR NEW INSTANCE OF CWI CLASS
-	;=================================================================
-	__New(FolderPath = "\\corp.halliburton.com\team\WD\Business Development and Technology\General\Engineering Public\PM App Logs\strMgmtLks"){		
-		
-		
-		this.INI_FolderPath := RegExReplace(FolderPath, "i)\\$")
-		
-		
-		;***************************************************************************************************
-		;   Group: Global Variables
-		;       Global variables created when class is constructed
-		;
-		;   	IDini_path 	- Full path to the object ID ini file
-		;  		SAPini_path - Full path to the CWI part SAP number ini file
-		;   	allSAPnums 	- A string list of every <REF Num - SAP Num> entry in the ini file
-		;   	allIDs 		- A string list of every <REF Num - ID Num> entry in the ini file
-		;
-		;   Group: Functions
-		;___________________________________________________________________________________________________
-		;***************************************************************************************************	
-		
+
+
+	;***************************************************************************************************
+	;	Function: __New
+	;		Constructor function for new class instances. 
+	;
+	;		Upon creation of a new instance of the class, 3 globally accessible variables are assigned--
+	;		allSAPnums, allIDs and allRTAs. each of these is a string containing a list of all the value
+	;		entries within the respective INI files.
+	;
+	__New(FolderPath = "\\corp.halliburton.com\team\WD\Business Development and Technology\General\Engineering Public\PM App Logs\strMgmtLks")
+	{				
+		this.INI_FolderPath := RegExReplace(FolderPath, "i)\\$")		
 		;__________________________________
-		; 		FULL PATHS TO THE INI FILES
+		; 		Full paths to the ini files
 		;
 		this.IDini_path := this.INI_FolderPath "\objectids.ini"
 		this.SAPini_path := this.INI_FolderPath "\partSAPnums.ini"
 		this.RTAini_path := this.INI_FolderPath "\rtaID.ini"
 				
-
-		;_____________________________________________________________________
-		; 		CREATE AN INI OBJECT FOR EACH OF THE FILES USING THE INI CLASS
+		;_____________________________________________________
+		; 	Read full contents of each INI into objects in mem
 		;
 		this.IDs := new Ini(this.idINI_path)
 		this.sapNums := new Ini(this.sapINI_path)
@@ -198,10 +582,6 @@ class CWI{
 
 
 
-
-
-
-
 	;***************************************************************************************************
 	;
 	; Function: get_rtaID
@@ -229,12 +609,6 @@ class CWI{
 		ErrorLevel=1
 		return
 	}
-
-
-
-
-
-
 
 
 
@@ -270,17 +644,8 @@ class CWI{
 
 
 
-
-
-
-
-
-
-
 	;***************************************************************************************************
-	;
 	; Function: URL
-	;
 	;		Returns the complete URL to an objects page in CWI in a specified view.
 	;
 	; Parameters:
@@ -296,23 +661,21 @@ class CWI{
 	;
 	; Remarks:
 	;		View modes:
-	;			"n" "nav" or "navigate"		-	Opens in Navigate view
-	;			"sig" or "promote"				- 	Opens in View Signitures view
-	;			"wu" or "where used"			-	Opens in Where Used view
-	;			"m" "mod" or "modify"			-	Opens in RTA Modify view
-	;			Blank or any other input		-	Opens in Structure Management (default)
-	; Related:
-	;		get_ID
+	;			n		-	Opens in Navigate view
+	;			sig		-	Opens the View Signitures page
+	;			wu		-	Opens Where Used for part
+	;			rta		-	Opens the Create/Modify view for RTAs
+	;			m		-	Opens Modify view
+	;			p		-	Opens printer friendly page
+	;			h		-	Opens part's history
 	;
 	URL(fromNum, view=""){
-		
-		
-		;===================================================
-		;			GET THE PART'S ID
-		;===================================================
+				
+		;____________________
+		; 	GET THE PART'S ID
+		;
 		ObjectID := this.get_id(fromNum)
-		
-		
+	
 		;_______________________
 		; 		ID NOT FOUND....
 		;
@@ -321,18 +684,16 @@ class CWI{
 			return
 		}
 		
-		Type := ErrorLevel
-		
-		
-		;____________________________________________
-		; 		SET THE DEFAULT VIEW IF NOT SPECIFIED
+		;__________________________________________
+		; 	DETERMINE OBJECT TYPE FROM GET_ID'S ERRORLEVEL
+		;	AND SET THE VIEW MODE
 		;
+		Type := ErrorLevel
 		view := view ? view
 			  : ErrorLevel = "rta" ? "rta"
 		      : ErrorLevel = "task" ? "sig"
-			  : ""
-			  			  
-		
+			  : ""			  			  
+			  
 		;______________
 		; 		GET URL
 		;
@@ -351,36 +712,6 @@ class CWI{
 		return viewURL
 	}
 						
-					;~ ;-- Try RTAs & Tasks ---
-		
-		;~ rID := this.get_rtaID(fromNum)
-		;~ If !(ErrorLevel){  ;-- Not found
-			;~ ErrorLevel=1
-			;~ return				
-		;~ }
-		
-		;~ ;----  Set the default views for tasks/Rtas ----
-		;~ ;-----------------------------------------------
-		;~ view := view ? view
-			 ;~ : (ErrorLevel = "task") ? "sig"
-			 ;~ : "rta"
-		;~ ;-----------------------------------------------
-		
-		;~ viewURL := !(rID) ? "" 
-					  ;~ : "http://cwiprod.corp.halliburton.com/cwi/" 
-					  ;~ . ((view = "n" || view = "nav" || view = "navigate") ? "Navigate.jsp?id=[pID]"
-					  ;~ : (view = "sig" || view = "promote") ? "Navigate.jsp?dir=from&tableID=Approvals%23&id=[pID]"
-					  ;~ : (view = "wu" || view = "where used") ? "Navigate.jsp?dir=to&id=[pID]"
-					  ;~ : (view = "rta") ? "CreateModifyRta.jsp?id=[pID]"
-					  ;~ : (view = "m" || view = "mod" || view = "modify") ? "Modify.jsp?id=[pID]"
-					  ;~ : (view = "p" || view = "print") ? "View_noMenu.jsp?id=[pID]&flowPic=false&printFriendly=True"
-					  ;~ : "StructureManagement.jsp?id=[pID]")
-	
-		;~ ErrorLevel=
-		;~ return Replace(viewURL, "[pID]", rID)
-	;~ }
-
-
 
 
 
@@ -619,21 +950,13 @@ FileRead(File){
 
 /* ***************************************************************************************************
 	Class: Ini
-		
 		Class that allows efficient and simple methods to manipulate INI files.
 		
-	Group: About
-	
-	Author: zzzooo10
-	Link: http://www.autohotkey.com/forum/viewtopic.php?p=462061#462061
+	Original Author & Link:
+		- By: (zzzooo10)
+		- Forum Post: <http://www.autohotkey.com/forum/viewtopic.php?p=462061#462061>
 
-	Thanks to Tuncay for the idea: http://www.autohotkey.com/forum/viewtopic.php?t=74496
 
-	Licence:
-		Use in source, library and binary form is permitted.
-		Redistribution and modification must meet the following condition:
-		- My nickname (zzzooo10) and the origin (link) must be reproduced by binaries, or attached in the documentation.
-		ALL MY SOFTWARE IS PROVIDED "AS IS" WITHOUT ANY EXPRESSED OR IMPLIED WARRANTIES.
   ***************************************************************************************************
  */
 class Ini
@@ -761,13 +1084,6 @@ class Ini
 	}
 	
 }
-
-
-
-
-
-
-
 
 
 
