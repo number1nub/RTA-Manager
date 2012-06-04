@@ -10,7 +10,7 @@ Resource_Files=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Include\Source\tools.ico
 Set_Version_Info=1
 Company_Name=Halliburton - WellDynamics
 File_Description=Functions, macros & scripts accessible via CMD line parameters. Supplements (and is required in order to run) the RTA Management Sheet.
-File_Version=3.0.1.0
+File_Version=3.0.2.0
 Inc_File_Version=0
 Internal_Name=CMDline_Functions
 Legal_Copyright=Rameen Bakhtiary - Halliburton|WellDynamics
@@ -276,6 +276,7 @@ rtaSearch:
 					  : (view = "sig" || view = "promote") ? "Navigate.jsp?dir=from&tableID=Approvals%23&id=[pID]"
 					  : (view = "wu" || view = "where used") ? "Navigate.jsp?dir=to&id=[pID]"
 					  : (view = "rta") ? "CreateModifyRta.jsp?id=[pID]"
+                      : (view = "v") ? "View.jsp?id=[pID]"
 					  : (view = "m" || view = "mod" || view = "modify") ? "Modify.jsp?id=[pID]"
 					  : (view = "p" || view = "print") ? "View_noMenu.jsp?id=[pID]&flowPic=false&printFriendly=True"
                       : (view = "h") ? "History.jsp?id=[pID]"
@@ -290,7 +291,7 @@ rtaSearch:
 	; Not found in INI -- search CWI
     ;===================================
     searchIT:
-    IniRead, fieldXpos, include\calibrationSettings.ini, fieldCoords, x, Error
+    IniRead, fieldXpos, %A_MyDocuments%\Halliburton RTA Manager\include\calibrationSettings.ini, fieldCoords, x, Error
     if (fieldxpos = "Error"){	;Calibration File not found
         ans := cmsgbox("CWI Search","Oh No!`n`nCWI Search calibration file not found. without it you`ncannot search CWI for objects that have not been indexed.`n`nWould you like to quickly calibrate now?","cblue", "Yes!|Not now", "resource\cwiicon.png")		
 		if ans = Not now
@@ -315,7 +316,7 @@ rtaSearch:
         sleep 250
         goto searchIt
     }
-    IniRead, sText_y, include\calibrationSettings.ini, fieldCoords, ST
+    IniRead, sText_y, %A_MyDocuments%\Halliburton RTA Manager\include\calibrationSettings.ini, fieldCoords, ST
     IfWinNotExist, Advanced Lookup -
     {
         run, http://cwiprod.corp.halliburton.com/cwi/AdvLookup.jsp
@@ -380,12 +381,12 @@ calibrateCWI:
     sleep, 100
     
     ; Write to INI
-    IniWrite, %quick_x%, include\calibrationSettings.ini, FieldCoords, x
-    IniWrite, %quick_y%, include\calibrationSettings.ini, FieldCoords, ST
+    IniWrite, %quick_x%, %A_mydocuments%\Halliburton RTA Manager\include\calibrationSettings.ini, FieldCoords, x
+    IniWrite, %quick_y%, %A_MyDocuments%\Halliburton RTA Manager\include\calibrationSettings.ini, FieldCoords, ST
     sleep, 300
 	
 	; Verify successful INI file creation
-    if !(FileExist("include\calibrationsettings.ini")) {
+    if !(FileExist(A_MyDocuments "\Halliburton RTA Manager\include\calibrationsettings.ini")) {
         ans := CMsgBox("CWI Search Calibration", "`nUh oh... it looks like there was an error in writing to the calibration file.`n`nWould you like to give it another try?", "", "Try it again|No","E")
 		if ans = No
 			ExitApp
