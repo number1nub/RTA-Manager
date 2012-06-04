@@ -10,32 +10,33 @@ Resource_Files=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Include\Source\tools.ico
 Set_Version_Info=1
 Company_Name=Halliburton - WellDynamics
 File_Description=GUI application with convinient sheet tools for RTA Management Sheet
-<<<<<<< .mine
-File_Version=2.0.1.1
+File_Version=3.0.2.0
 Inc_File_Version=0
-=======
-File_Version=2.1.0.12
-Inc_File_Version=1
->>>>>>> .r61
 Internal_Name=RTA Sheet Tools
 Original_Filename=RTA Sheet Tools
 Product_Name=Source: AutoHotkey_L
 Product_Version=1.1.5.6
 Set_AHK_Version=1
 [ICONS]
-<<<<<<< .mine
 Icon_1=%In_Dir%\tools.ico
-=======
-Icon_1=C:\_.R.E.P.O.S._\Halliburton RTA Manager\Include\Source\tools.ico
->>>>>>> .r61
 
 * * * Compile_AHK SETTINGS END * * *
 */
 
 ;_____________________________________________________________________
 ;---------------------------------------------------------------------
-; TITLE: RTA Sheet Tools
-;--------------------------------------------------------------------- 
+; TITLE:            R T A   S H E E T   T O O L S
+;---------------------------------------------------------------------
+; AUTHORS:
+;	GUI & LAYOUT:		Sam T (acTennisKrazy)
+;	FULL INTEGRATION:	Rameen B  (WSNHapps)
+; DATE:			 		10/27/2011
+; LANGUAGE:		 		English
+; PLATFORM:		 		Created on Windows 7
+; AHK-VERSION:	  		AutoHotkey_L
+;---------------------------------------------------------------------
+; DESCRIPTION:
+; 
 ; External GUI that gives the RTA sheet additional functionality.
 ; Performs tasks  such as hiding rows and generating reports through
 ; and Excel COM interface.
@@ -57,10 +58,8 @@ AIS_COLUMNS =
 ;======================================================================================================
 ; DETERMINE RTA SHEET INSTALL LOCATION
 ;======================================================================================================
-try RegRead, InstallDir, HKCU, Software\Halliburton RTA Manager, InstallDir
-catch
 	InstallDir := A_MyDocuments "\Halliburton RTA Manager"
-installDir := RegExReplace(installDir, "\\$")
+
 
 
 
@@ -109,20 +108,28 @@ Loop, 26 {
 }
 
 
+
+
 ;======================================================================================================
 ;PARAMETER HANDLER - EXIT IF NOT RUN WITH PARAMETERS
 ;======================================================================================================
 if 0=0
 	ExitApp
 
+
+
+
+;======================================================================================================
+;ASSIGN PARAMETERS TO VARIABLES P1, P2,... PN
+;======================================================================================================
 loop, %0%
 	p%a_index% := % %a_index%
 
-;Row count for listview control
-RowCount := 0
-loop, parse, p1, CSV, %A_Space%
-	RowCount ++
-RowCount-=4
+	;Row count for listview control
+	RowCount := 0
+	loop, parse, p1, CSV, %A_Space%
+		RowCount ++
+	RowCount-=4
 
 
 
@@ -178,18 +185,19 @@ buildGUI:
 	Gui, Add, Button,  xs+7 ys+23 %BUTTON_OPTS% gpresetViews vpmtHide, PMT Mode
 	Gui, Add, Button,  xp y+5 %BUTTON_OPTS% gpresetViews vdeptHide, Edit Mode
 	Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vtrackRtaHide, RTA Tracking
-	Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vtrackTSGhide, TSG Mode
+	Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vTSGhide, TSG Mode
 	Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vrtaDatesHide, RTA Dates
 	Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vshowAll, Show All
+	
+	gui, font, cblack
+	if (xl.Range("showPastEngStatus") != "true"	&& xl.Range("showPastEngStatus") != "TSG")
+		cbOpts = +checked
+	else
+		cbOpts := ""
+	
+	gui, add, checkbox, xp y+35 %cbOpts% +center vcurStatusTSG gcurrentStatus, Show RTAs`npast Engineering
 
-<<<<<<< .mine
-Gui, Add, Button,  xs+7 ys+23 %BUTTON_OPTS% gpresetViews vpmtHide, PMT Mode
-Gui, Add, Button,  xp y+5 %BUTTON_OPTS% gpresetViews vdeptHide, Edit Mode
-Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vtrackRtaHide, RTA Tracking
-Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vTSGhide, TSG Mode
-Gui, Add, Button, xp y+5 %BUTTON_OPTS% gpresetViews vshowAll, Show All
-=======
->>>>>>> .r61
+	
 
 	gui, Add, Text, ys+140,
 
@@ -279,6 +287,18 @@ Else
 	PostMessage, 0xA1, 2,,, A		;Move window when dragging header image
 return
 
+
+
+
+currentStatus:
+	gui, submit, nohide
+	
+	if curStatusTSG = 1
+		xl.Range("showPastEngStatus") := "true"	
+	else
+		xl.Range("showPastEngStatus") := "false"
+	
+return
 
 
 
@@ -399,9 +419,14 @@ return
 
 
 ;======================================================================================================
-;PRESET SHEET VIEW BUTTON EVENT
+;PM DATES HIDE BUTTON EVENT
 ;======================================================================================================
 PresetViews:
+	if (A_GuiControl = "TSGhide")
+		xl.Range("showPastEngStatus") := "TSG"
+	else if (xl.Range("showPastEngStatus") = "TSG")
+		xl.Range("showPastEngStatus") := "true"
+	
 	xl.cells.ENTIRECOLUMN.Hidden:=false
 	xl.Range(A_GuiControl).ENTIRECOLUMN.Hidden:=true
 	Sleep 50
@@ -418,7 +443,7 @@ return
 HideCol(XL, start, action = "h", end="")
 {
 	global col
-	End := end ? End : start
+	End := end ? End : start	
 	xl.columns(col[start] ":" col[end]).ENTIRECOLUMN.Hidden := (action="h" ? true : false)
 }
 
@@ -447,7 +472,8 @@ ShowRowColor(RowNum, EndRow="")
 ;SET COLORS FOR NOT VISIBLE ROWS
 ;======================================================================================================
 HideRowColor(RowNum, EndRow="")
-{	
+{
+	
 	LoopCT := EndRow ? (EndRow-RowNum)+1 : 1
 
 	Loop, %LoopCT%
