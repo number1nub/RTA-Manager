@@ -7,21 +7,32 @@ Title: Halliburton RTA Manager Quick Guide
 
 
 Group: Change Log
-	Listing of changes made between releases
 	
-	
-Summary/Highlight of Significant Changes From Since Release:
+Build 4.2.9 (CWI Released Rev C):
 	- RTAs that are in Design Hold or Define Requirements appear red in the table
-	- New, clean and simple look with more intuitive interfacing
 	- RTA Details GUI has buttons to open the RTA in multiple CWI view including Modify, Structure, Print, History, and View
-	- All RTA Load sheets generated for loading into CWI are backed up to a public location, and information about when it was created, who by and what lab office it was for
-	- Multiple failsafes added to ensure data would not be lost/overwritten while using in Edit Mode. 
-	- View Mode tool with multiple pre-set table views that can be switched between. Also allows toggling show/hide of all columns
+	- All rtaLoad sheets generated for loading into CWI are backed up to a public location, and information about when it was created, who by and what lab office it was for
+	- Failsafes added to prevent data loss while in Edit mode; for example, attempting to refresh RTA table data while there are 
+	- *<Sheet View Tool>* with multiple _highly_ convinient new features; see the <Sheet View Tool> section for more info
+	& lay out the RTA table in way Also allows toggling show/hide of all columns
 	- Button on RTA Detail GUI to open a new email to the RTA requestor with (user customizable) CC contacts.
 	- Auto-insert note header feature added to RTA detail GUI; inserts a timestamp and name/initials. User customizable timestamp format and name input
 	- Fixed Bugs in 'The prioritizer'
 	
+	
+Build 4.2.9:
+	- Fixed prioritizer issue relating to file name of public backup file
+	- Updated CMDline_Functions to allow CWI view mode to open correctly and to fix calibration to work correctly
 
+
+Build 4.2.7:
+	- Added TSG mode checkbox toggle to RTA Sheet Tools
+	- Changed colors to increase contrast and make easier to view
+
+
+Build 4.2.6:
+	-Updated backup file name to save using user short name (first initial + last name)
+	-Character count on description and comments. Turns red if count > 3500
 	
 Build 4.2.2:
 	- Sheet view mode tool allows switching between multiple preset table views & quick show/hide of individual columns
@@ -86,9 +97,6 @@ Build 3.0.24 (CWI Released Rev B):
 	- Created an Advanced Installer project and deployed in MSI format instead of self compiled EXE
 
 
-
-
-
 Group: General Overview and Important Notes
 	Overview of commonly experienced issues and ways to help you avoid how to deal with them
 	
@@ -101,4 +109,12 @@ Group: General Overview and Important Notes
 		
 		- If you are using the sheet and want to change the monitor's resolution, close
 		  the sheet, change resolution, and re-open it.
+
+Section: Sheet View Tool
+	The Sheet View Tool utility gives quick, 
+	(See Sheet View Tool SS.png)
+.  allows selecting from multiple view mode buttons that set the visible columns and table filter in ways 
+
+
+
 
